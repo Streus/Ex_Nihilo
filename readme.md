@@ -8,7 +8,7 @@ Quick rundown of formatting tips:
 * Strikethrough with ~~two tildes~~ "~~"
 
 1. Numbered lists are just *a* number, doesn't matter which.
-..1. Two dots for indenting, sub-lists are automatic.
+  1. Two spaces for indenting, sub-lists are automatic.
 
 Links are like so: enclose the hypertext in square brackets "[]", and the link in parenthesis after "()".
 Example: [Google](https://www.google.com)
