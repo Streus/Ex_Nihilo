@@ -1,4 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Scripts.meta
+guid: 49b0dc59b680fb444a57b4f19e248459
+folderAsset: yes
+timeCreated: 1469943137
+=======
 <<<<<<< HEAD
 guid: c7f839d2563e12e4fa8ee922ddf5fcea
 folderAsset: yes
@@ -8,6 +13,7 @@ guid: fbbdda9c03f31e746b811f910d5db3ca
 folderAsset: yes
 timeCreated: 1469923959
 >>>>>>> origin/staging
+>>>>>>> origin/staging:Assets/Scripts.meta
 licenseType: Free
 DefaultImporter:
   userData: 

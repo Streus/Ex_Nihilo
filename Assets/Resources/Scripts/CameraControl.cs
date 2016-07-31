@@ -4,17 +4,17 @@ using System.Collections;
 public class CameraControl : MonoBehaviour {
 
 	//A reference to the main camera
-	private Camera mainCamera;
+	private static Camera mainCamera;
 
 	//The x, y offset of the game arena
-	private float xOffset;
-	private float yOffset;
+	public static float xOffset;
+	public static float yOffset;
 
 	//Height above the game arena
-	private float zoom;
+	private static float zoom;
 
-	private float xDamp;
-	private float yDamp;
+	private static float xDamp;
+	private static float yDamp;
 
 	// Use this for initialization
 	void Start () {
@@ -24,29 +24,30 @@ public class CameraControl : MonoBehaviour {
 		yOffset = mainCamera.transform.position.y;
 		zoom  = Mathf.Log(mainCamera.orthographicSize, 2);
 
-		xDamp = 0.2F;
-		yDamp = 0.2F;
+		xDamp = 0.5F;
+		yDamp = 0.5F;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//If the RMB is down, pan around
-		if (Input.GetKey ("mouse 1")) {
-			float x = Input.GetAxis ("Mouse X") * zoom * xDamp;
-			float y = Input.GetAxis ("Mouse Y") * zoom * yDamp;
+		//If the RMB is down, and player is not in a cell, pan around
+		if (!Game.playerControllingCell) {
+			if (Input.GetKey ("mouse 1")) {
+				float x = Input.GetAxis ("Mouse X") * zoom * xDamp;
+				float y = Input.GetAxis ("Mouse Y") * zoom * yDamp;
 
-			xOffset -= x;
-			yOffset -= y;
-
-			updateOrientation ();
+				xOffset += x;
+				yOffset += y;
+			}
 		}
 
 		//If the scrollwheel is moved, zoom
 		float scroll = Input.GetAxis ("Mouse ScrollWheel");
 		if (scroll != 0) {
 			zoom -= scroll;
-			updateOrientation ();
 		}
+
+		updateOrientation ();
 	}
 
 	private void updateOrientation() {
