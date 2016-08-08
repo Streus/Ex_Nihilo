@@ -55,17 +55,32 @@ public class DevConsole : MonoBehaviour {
 			else
 				inputField.text = cmdHistory.get (hisIndex);
 		}
+			
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			setEnabled (false);
+		}
+
+		if (Input.GetKeyDown (KeyCode.BackQuote)) {
+			toggleEnabled ();
+		}
 	}
 
 	// Toggle the state of the Developer Console
-	public void toggleEnabled()
-	{
-		consoleEnabled = !consoleEnabled;
+	public void toggleEnabled() {
+		setEnabled (!getEnabled ());
+	}
+
+	public void setEnabled(bool to) {
+		consoleEnabled = to;
 		canvasgroup.blocksRaycasts = canvasgroup.interactable = consoleEnabled;
 		if (consoleEnabled)
 			canvasgroup.alpha = 1;
 		else
 			canvasgroup.alpha = 0;
+	}
+
+	public bool getEnabled() {
+		return consoleEnabled;
 	}
 
 	// Attempt to parse the input text into a command and run it
@@ -80,7 +95,7 @@ public class DevConsole : MonoBehaviour {
 		ofScroll.value = 0;
 
 		//parse the command text
-		string command = inputField.text + " ";
+		string command = inputField.text.ToLower() + " ";
 		int argumentEnd = 0;
 		string[] arguments = new string[10];
 		int argPos = 0;
@@ -93,6 +108,15 @@ public class DevConsole : MonoBehaviour {
 
 		//find a command that matches
 		switch (arguments[0]) {
+		case "help":
+			string text = "Here are all the commands (case insensitive):\n" +
+			              "help: Prints out this help menu\n" +
+			              "version: Returns Unity version information\n" +
+						  "console [size] (amount): New size in pixels\n" +
+			              "console [color] (r) (g) (b): Changes the color of the console\n";
+
+			overflowField.text += text;
+			break;
 		case "checkUnityVersion":
 			overflowField.text += "Unity Version " + Application.unityVersion + "\n";
 			break;
@@ -104,8 +128,8 @@ public class DevConsole : MonoBehaviour {
 				int r = int.Parse(arguments [2]);
 				int g = int.Parse(arguments [3]);
 				int b = int.Parse(arguments [4]);
-				transform.GetChild (0).GetComponent<Image> ().color = new Color ((float)r, (float)g, (float)b, 255f);
-				transform.GetChild (1).GetComponent<Image> ().color = new Color ((float)r, (float)g, (float)b, 255f);
+				transform.GetChild (0).GetComponent<Image> ().color = new Color (((float)r)/255F, ((float)g)/255F, ((float)b)/255F, 1);
+				transform.GetChild (1).GetComponent<Image> ().color = new Color (((float)r)/255F, ((float)g)/255F, ((float)b)/255F, 1);
 			}
 			break;
 		default:
