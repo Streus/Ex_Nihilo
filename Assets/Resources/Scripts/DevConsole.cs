@@ -18,13 +18,10 @@ public class DevConsole : MonoBehaviour {
 	private static HistoryBuffer cmdHistory;
 	public int historySize;
 	public int hisIndex;
-<<<<<<< HEAD
 
 	//Command related variables
 	public static Assembly assembly = Assembly.GetExecutingAssembly ();
 	public static ArrayList commands = new ArrayList ();
-=======
->>>>>>> origin/staging
 
 	// Use this for initialization
 	void Start () {
