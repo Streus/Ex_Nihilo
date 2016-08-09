@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class CommandBase : MonoBehaviour {
+public abstract class CommandBase {
 
 	//have a ton of game-related variables here that the commands can
 	//access. Stuff like access to the main menus, internal game variables,
@@ -29,7 +29,7 @@ public abstract class CommandBase : MonoBehaviour {
 	public void Start () {}
 	
 	//Update is called once per frame - optional
-	public void Update () {}
+	//public void Update () {}
 
 	//This method is called when your command is to be executed
 	//@param args: an arbitrary list of arguments
@@ -37,11 +37,11 @@ public abstract class CommandBase : MonoBehaviour {
 
 	//~~~ Useful utility methods below ~~~
 
-	private void println(string str) {
-		//DevConsole.println (str);
+	protected void Println(string str) {
+		DevConsole.Println (str);
 	}
 
-	private void print(string str) {
-		//DevConsole.print (str);
+	protected void Print(string str) {
+		DevConsole.Print (str);
 	}
 }

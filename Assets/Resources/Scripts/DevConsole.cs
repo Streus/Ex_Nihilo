@@ -21,7 +21,9 @@ public class DevConsole : MonoBehaviour {
 
 	//Command related variables
 	public static Assembly assembly = Assembly.GetExecutingAssembly ();
-	public static ArrayList commands = new ArrayList ();
+	public static ArrayList commands;
+
+	public static Transform _transform;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +41,8 @@ public class DevConsole : MonoBehaviour {
 		hisIndex = -1;
 
 		//Load in the commands
+		commands = new ArrayList();
+
 		string baseDir = Directory.GetCurrentDirectory ();
 		string[] files = Directory.GetFiles(baseDir + "/Assets/Resources/Scripts/Commands");
 		foreach(string s in files) {
@@ -56,9 +60,15 @@ public class DevConsole : MonoBehaviour {
 					Debug.Log ("Raw class: " + rawClass);
 					CommandBase cb = assembly.CreateInstance (rawClass) as CommandBase;
 					commands.Add (cb);
+					Debug.Log ("Class's invocation name: " + cb.getInvocation ());
+					Debug.Log ("Class's help message: " + cb.getHelpMessage ());
+					Debug.Log ("Command list length: " + commands.Count);
 				}
 			}
 		}
+
+		//Create some static stuff
+		_transform = transform;
 	}
 
 	void Awake () {
@@ -90,7 +100,10 @@ public class DevConsole : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.BackQuote)) {
-			toggleEnabled ();
+			//allow tildes
+			if (!(Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))) {
+				toggleEnabled ();
+			}
 		}
 	}
 
@@ -120,8 +133,7 @@ public class DevConsole : MonoBehaviour {
 		hisIndex = cmdHistory.getSize ();
 
 		//bump entered text into the overflow field
-		println (">" + inputField.text);
-		ofScroll.value = 0;
+		//Println (inputField.text);
 
 
 		//parse the command text
@@ -129,6 +141,26 @@ public class DevConsole : MonoBehaviour {
 		string[] arguments = command.Split (new char[]{ ' ', ',' });
 
 		//find a command that matches
+		bool foundCommand = false;
+		for (int i = 0; i < commands.Count; i++) {
+			CommandBase com = commands [i] as CommandBase;
+			if (com.getInvocation ().Equals (arguments [0])) {
+				com.Execute (arguments);
+				foundCommand = true;
+			}
+		}
+
+		//If no command found, report that
+		if (!foundCommand) {
+			Println ("invalid command: \"" + arguments [0] + "\"");
+		}
+			
+		//clear the input line text
+		inputField.text = "";
+		ofScroll.value = 0;
+
+
+		/*
 		switch (arguments[0]) {
 		case "help":
 			string text = "Here are all the commands (case insensitive):\n" +
@@ -158,18 +190,17 @@ public class DevConsole : MonoBehaviour {
 			Debug.Log ("Invalid command or empty command line!");
 			break;
 		}
-		//clear the input line text
-		inputField.text = "";
+		*/
 	}
 
 	//Print to the main text field
-	public static void print(string str) {
-		overflowField.text += str;
+	public static void Print(string str) {
+		overflowField.text += ">" + str;
 	}
 
 	//Print (with extra newline) to the main text field
-	public static void println(string str) {
-		overflowField.text += str + "\n";
+	public static void Println(string str) {
+		overflowField.text += ">" + str + "\n";
 	}
 
 	private class HistoryBuffer {
