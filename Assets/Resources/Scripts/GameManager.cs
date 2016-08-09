@@ -6,13 +6,10 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		DontDestroyOnLoad(transform.gameObject);
 		if(GameObject.Find("/DevConsole") == null)
 		{			
 			PrefabUtility.InstantiatePrefab(Resources.Load("Prefabs/GameManagement/DevConsole", typeof(GameObject)));
-		}
-		if(GameObject.Find("BindingsManager") == null)
-		{
-			PrefabUtility.InstantiatePrefab(Resources.Load("Prefabs/GameManagement/BindingsManager", typeof(GameObject)));
 		}
 	}
 	
