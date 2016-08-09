@@ -22,6 +22,7 @@ public class Console : CommandBase {
 			float b = DevConsole._transform.GetChild (0).GetComponent<Image> ().color.b;
 			float a = DevConsole._transform.GetChild (0).GetComponent<Image> ().color.a;
 
+			//resiliant input- if any fail, then use a default value
 			try {
 				r = (int.Parse (args [2])) / 255F;
 			} catch (Exception) {
@@ -41,9 +42,24 @@ public class Console : CommandBase {
 
 			DevConsole._transform.GetChild (0).GetComponent<Image> ().color = new Color (r, g, b, a);
 			DevConsole._transform.GetChild (1).GetComponent<Image> ().color = new Color (r, g, b, a);
+
+			//try to match foreground text color against the color chosen
+			if ((r * 0.299 + g * 0.587 + b * 0.114) > 0.729) {
+				DevConsole.inputField.textComponent.color = Color.black;
+				DevConsole.overflowField.color = Color.black;
+			} else {
+				DevConsole.inputField.textComponent.color = Color.white;
+				DevConsole.overflowField.color = Color.white;
+			}
 			break;
 		case "size":
-			int change = int.Parse (args [2]);
+			//if bad input, default to no change
+			int change = 0;
+
+			try {
+				change = int.Parse (args [2]);
+			} catch (Exception) {
+			}
 
 			Vector2 textMin = DevConsole._transform.GetChild (1).GetComponent<RectTransform> ().offsetMin;
 			Vector2 inputMin = DevConsole._transform.GetChild (0).GetComponent<RectTransform> ().offsetMin;
