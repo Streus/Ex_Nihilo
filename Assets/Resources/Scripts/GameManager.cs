@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if(GameObject.Find("DevConsole") == null)
-		{
-			GameObject dvcnsl = (GameObject)Instantiate(Resources.Load("Prefabs/GameManagement/DevConsole.prefab", typeof(GameObject)));
-			GameObject canvas = (GameObject)GameObject.Find("Canvas");
-			dvcnsl.transform.parent = canvas.transform;
+		if(GameObject.Find("/DevConsole") == null)
+		{			
+			PrefabUtility.InstantiatePrefab(Resources.Load("Prefabs/GameManagement/DevConsole", typeof(GameObject)));
 		}
-		if(GameObject.Find("Bindings Manager") == null)
+		if(GameObject.Find("BindingsManager") == null)
 		{
 			Instantiate(Resources.Load("Prefabs/GameManagement/BindingsManager.prefab", typeof(GameObject)));
 		}
