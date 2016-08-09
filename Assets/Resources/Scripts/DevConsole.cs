@@ -13,8 +13,8 @@ public class DevConsole : MonoBehaviour {
 	private static Scrollbar ofScroll;
 
 	private static HistoryBuffer cmdHistory;
-	public static int historySize;
-	public static int hisIndex;
+	public int historySize;
+	public int hisIndex;
 
 	// Use this for initialization
 	void Start () {

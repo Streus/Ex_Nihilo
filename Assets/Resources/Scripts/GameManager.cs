@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 		}
 		if(GameObject.Find("BindingsManager") == null)
 		{
-			Instantiate(Resources.Load("Prefabs/GameManagement/BindingsManager.prefab", typeof(GameObject)));
+			PrefabUtility.InstantiatePrefab(Resources.Load("Prefabs/GameManagement/BindingsManager", typeof(GameObject)));
 		}
 	}
 	
