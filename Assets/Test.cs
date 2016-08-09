@@ -28,7 +28,7 @@ public class Test : MonoBehaviour {
 					Debug.Log ("Found command base- skipping");
 				} else {
 					Debug.Log ("Raw class: " + rawClass);
-					CommandBase cb = assembly.CreateInstance (rawClass)) as CommandBase;
+					CommandBase cb = assembly.CreateInstance (rawClass) as CommandBase;
 					commands.Add (cb);
 					help += cb.getInvocation().ToLower() + ": " + cb.getHelpMessage();
 				}

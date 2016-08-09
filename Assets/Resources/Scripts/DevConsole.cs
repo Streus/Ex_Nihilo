@@ -7,14 +7,14 @@ public class DevConsole : MonoBehaviour {
 
 	public static bool consoleEnabled = false;
 
-	private CanvasGroup canvasgroup;
-	private Text overflowField;
-	private InputField inputField;
-	private Scrollbar ofScroll;
+	private static CanvasGroup canvasgroup;
+	private static Text overflowField;
+	private static InputField inputField;
+	private static Scrollbar ofScroll;
 
-	private HistoryBuffer cmdHistory;
-	public int historySize;
-	public int hisIndex;
+	private static HistoryBuffer cmdHistory;
+	public static int historySize;
+	public static int hisIndex;
 
 	// Use this for initialization
 	void Start () {
@@ -138,6 +138,16 @@ public class DevConsole : MonoBehaviour {
 		}
 		//clear the input line text
 		inputField.text = "";
+	}
+
+	//Print to the main text field
+	public static void print(string str) {
+		overflowField.text += str;
+	}
+
+	//Print (with extra newline) to the main text field
+	public static void println(string str) {
+		overflowField.text += str + "\n";
 	}
 
 	private class HistoryBuffer {

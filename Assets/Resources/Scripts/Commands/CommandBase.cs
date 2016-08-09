@@ -38,10 +38,10 @@ public abstract class CommandBase : MonoBehaviour {
 	//~~~ Useful utility methods below ~~~
 
 	private void println(string str) {
-		DevConsole.println (str);
+		//DevConsole.println (str);
 	}
 
 	private void print(string str) {
-		DevConsole.print (str);
+		//DevConsole.print (str);
 	}
 }
