@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEditor;
 
+using System.IO;
+using System.Reflection;
+
 public class DevConsole : MonoBehaviour {
 
 	public static bool consoleEnabled = false;
@@ -13,8 +16,12 @@ public class DevConsole : MonoBehaviour {
 	private static Scrollbar ofScroll;
 
 	private static HistoryBuffer cmdHistory;
-	public static int historySize;
-	public static int hisIndex;
+	public int historySize;
+	public int hisIndex;
+
+	//Command related variables
+	public static Assembly assembly = Assembly.GetExecutingAssembly ();
+	public static ArrayList commands = new ArrayList ();
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +37,28 @@ public class DevConsole : MonoBehaviour {
 
 		cmdHistory = new HistoryBuffer(historySize);
 		hisIndex = -1;
+
+		//Load in the commands
+		string baseDir = Directory.GetCurrentDirectory ();
+		string[] files = Directory.GetFiles(baseDir + "/Assets/Resources/Scripts/Commands");
+		foreach(string s in files) {
+			if (s.EndsWith ("cs")) {
+				Debug.Log ("Found file: " + s);
+
+				int start = 1 + Mathf.Max (s.LastIndexOf ('/'), s.LastIndexOf ('\\'));
+				int end = s.LastIndexOf ('.');
+
+				string rawClass = s.Substring (start, end - start);
+
+				if (rawClass.Equals ("CommandBase")) {
+					Debug.Log ("Found command base- skipping");
+				} else {
+					Debug.Log ("Raw class: " + rawClass);
+					CommandBase cb = assembly.CreateInstance (rawClass) as CommandBase;
+					commands.Add (cb);
+				}
+			}
+		}
 	}
 
 	void Awake () {
@@ -91,20 +120,13 @@ public class DevConsole : MonoBehaviour {
 		hisIndex = cmdHistory.getSize ();
 
 		//bump entered text into the overflow field
-		overflowField.text += ">" + inputField.text + "\n";
+		println (">" + inputField.text);
 		ofScroll.value = 0;
+
 
 		//parse the command text
 		string command = inputField.text.ToLower() + " ";
-		int argumentEnd = 0;
-		string[] arguments = new string[10];
-		int argPos = 0;
-		while (command.Length > 0 && argPos < arguments.Length) {
-			argumentEnd = command.IndexOf (' ');
-			arguments [argPos] = command.Substring (0, argumentEnd);
-			argPos++;
-			command = command.Substring (argumentEnd + 1);
-		}
+		string[] arguments = command.Split (new char[]{ ' ', ',' });
 
 		//find a command that matches
 		switch (arguments[0]) {
