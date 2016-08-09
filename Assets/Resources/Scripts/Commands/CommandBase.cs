@@ -16,6 +16,7 @@ public abstract class CommandBase : MonoBehaviour {
 	 * for optional parameters, [vertical | bars] signify one-of-X options, etc
 	 */
 
+
 	//a few methods that you must override here
 
 	//The invocation name- how you call the command
@@ -24,13 +25,23 @@ public abstract class CommandBase : MonoBehaviour {
 	//A short (<80 character) message that appears in the help menu
 	public abstract string getHelpMessage();
 
-	//Initialization
-	public abstract void Start ();
+	//Initialization - optional
+	public void Start () {}
 	
-	//Update is called once per frame
-	public abstract void Update ();
+	//Update is called once per frame - optional
+	public void Update () {}
 
 	//This method is called when your command is to be executed
 	//@param args: an arbitrary list of arguments
 	public abstract void Execute (string[] args);
+
+	//~~~ Useful utility methods below ~~~
+
+	private void println(string str) {
+		DevConsole.println (str);
+	}
+
+	private void print(string str) {
+		DevConsole.print (str);
+	}
 }
