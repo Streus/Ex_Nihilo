@@ -16,6 +16,14 @@ public abstract class CommandBase {
 	 * for optional parameters, [vertical | bars] signify one-of-X options, etc
 	 */
 
+	/**
+	 * Make an options class that provides support to list full help message like so:
+	 *
+	 * console: provides various dev console options
+	 *     color [r] [g] [b] [a]: changes color. non-numeric values default to current value.
+	 *     size [px]: changes size by the amount "px"
+	 */
+
 
 	//a few methods that you must override here
 

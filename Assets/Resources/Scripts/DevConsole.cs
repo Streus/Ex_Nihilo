@@ -6,6 +6,8 @@ using UnityEditor;
 using System.IO;
 using System.Reflection;
 
+using UnityEngine.EventSystems;
+
 public class DevConsole : MonoBehaviour {
 
 	public static bool consoleEnabled = false;
@@ -18,6 +20,10 @@ public class DevConsole : MonoBehaviour {
 	private static HistoryBuffer cmdHistory;
 	public int historySize;
 	public int hisIndex;
+
+	//Keep track of the last selected GameObject, so when we close the dev
+	//console, the progress is saved
+	public static GameObject lastSelected;
 
 	//Command related variables
 	public static Assembly assembly = Assembly.GetExecutingAssembly ();
@@ -47,22 +53,15 @@ public class DevConsole : MonoBehaviour {
 		string[] files = Directory.GetFiles(baseDir + "/Assets/Resources/Scripts/Commands");
 		foreach(string s in files) {
 			if (s.EndsWith ("cs")) {
-				Debug.Log ("Found file: " + s);
-
 				int start = 1 + Mathf.Max (s.LastIndexOf ('/'), s.LastIndexOf ('\\'));
 				int end = s.LastIndexOf ('.');
 
 				string rawClass = s.Substring (start, end - start);
 
 				if (rawClass.Equals ("CommandBase")) {
-					Debug.Log ("Found command base- skipping");
 				} else {
-					Debug.Log ("Raw class: " + rawClass);
 					CommandBase cb = assembly.CreateInstance (rawClass) as CommandBase;
 					commands.Add (cb);
-					Debug.Log ("Class's invocation name: " + cb.getInvocation ());
-					Debug.Log ("Class's help message: " + cb.getHelpMessage ());
-					Debug.Log ("Command list length: " + commands.Count);
 				}
 			}
 		}
@@ -100,6 +99,9 @@ public class DevConsole : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.BackQuote)) {
+			//remove stray backticks
+			inputField.text = inputField.text.Replace("`", "");
+
 			//allow tildes
 			if (!(Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift))) {
 				toggleEnabled ();
@@ -115,14 +117,31 @@ public class DevConsole : MonoBehaviour {
 	public void setEnabled(bool to) {
 		consoleEnabled = to;
 		canvasgroup.blocksRaycasts = canvasgroup.interactable = consoleEnabled;
-		if (consoleEnabled)
+		if (consoleEnabled) {
 			canvasgroup.alpha = 1;
-		else
+			focus ();
+		} else {
 			canvasgroup.alpha = 0;
+			//defocus ();
+		}
 	}
 
 	public bool getEnabled() {
 		return consoleEnabled;
+	}
+
+	//Focuses on the dev console, so you can start typing
+	public void focus() {
+		lastSelected = EventSystem.current.currentSelectedGameObject;
+		EventSystem.current.SetSelectedGameObject (inputField.gameObject);
+		inputField.OnPointerClick (null);
+	}
+
+	//Defocuses the dev console to resume gameplay
+	public void defocus() {
+		if (lastSelected != null) {
+			EventSystem.current.SetSelectedGameObject (lastSelected);
+		}
 	}
 
 	// Attempt to parse the input text into a command and run it
@@ -131,10 +150,6 @@ public class DevConsole : MonoBehaviour {
 		//save command to history buffer
 		cmdHistory.add(inputField.text);
 		hisIndex = cmdHistory.getSize ();
-
-		//bump entered text into the overflow field
-		//Println (inputField.text);
-
 
 		//parse the command text
 		string command = inputField.text.ToLower() + " ";
@@ -159,38 +174,8 @@ public class DevConsole : MonoBehaviour {
 		inputField.text = "";
 		ofScroll.value = 0;
 
-
-		/*
-		switch (arguments[0]) {
-		case "help":
-			string text = "Here are all the commands (case insensitive):\n" +
-			              "help: Prints out this help menu\n" +
-			              "version: Returns Unity version information\n" +
-						  "console [size] (amount): New size in pixels\n" +
-			              "console [color] (r) (g) (b): Changes the color of the console\n";
-
-			overflowField.text += text;
-			break;
-		case "checkUnityVersion":
-			overflowField.text += "Unity Version " + Application.unityVersion + "\n";
-			break;
-		case "console":
-			if (arguments [1] == "size") {
-				
-			}
-			if (arguments [1] == "color") {
-				int r = int.Parse(arguments [2]);
-				int g = int.Parse(arguments [3]);
-				int b = int.Parse(arguments [4]);
-				transform.GetChild (0).GetComponent<Image> ().color = new Color (((float)r)/255F, ((float)g)/255F, ((float)b)/255F, 1);
-				transform.GetChild (1).GetComponent<Image> ().color = new Color (((float)r)/255F, ((float)g)/255F, ((float)b)/255F, 1);
-			}
-			break;
-		default:
-			Debug.Log ("Invalid command or empty command line!");
-			break;
-		}
-		*/
+		//retain focus
+		focus();
 	}
 
 	//Print to the main text field
