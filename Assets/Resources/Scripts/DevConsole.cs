@@ -12,18 +12,14 @@ public class DevConsole : MonoBehaviour {
 
 	public static bool consoleEnabled = false;
 
-	private static CanvasGroup canvasgroup;
-	private static Text overflowField;
-	private static InputField inputField;
-	private static Scrollbar ofScroll;
+	public static CanvasGroup canvasgroup;
+	public static Text overflowField;
+	public static InputField inputField;
+	public static Scrollbar ofScroll;
 
 	private static HistoryBuffer cmdHistory;
 	public int historySize;
 	public int hisIndex;
-
-	//Keep track of the last selected GameObject, so when we close the dev
-	//console, the progress is saved
-	public static GameObject lastSelected;
 
 	//Command related variables
 	public static Assembly assembly = Assembly.GetExecutingAssembly ();
@@ -59,6 +55,7 @@ public class DevConsole : MonoBehaviour {
 				string rawClass = s.Substring (start, end - start);
 
 				if (rawClass.Equals ("CommandBase")) {
+					//Skip over
 				} else {
 					CommandBase cb = assembly.CreateInstance (rawClass) as CommandBase;
 					commands.Add (cb);
@@ -122,7 +119,6 @@ public class DevConsole : MonoBehaviour {
 			focus ();
 		} else {
 			canvasgroup.alpha = 0;
-			//defocus ();
 		}
 	}
 
@@ -132,16 +128,8 @@ public class DevConsole : MonoBehaviour {
 
 	//Focuses on the dev console, so you can start typing
 	public void focus() {
-		lastSelected = EventSystem.current.currentSelectedGameObject;
 		EventSystem.current.SetSelectedGameObject (inputField.gameObject);
 		inputField.OnPointerClick (null);
-	}
-
-	//Defocuses the dev console to resume gameplay
-	public void defocus() {
-		if (lastSelected != null) {
-			EventSystem.current.SetSelectedGameObject (lastSelected);
-		}
 	}
 
 	// Attempt to parse the input text into a command and run it
