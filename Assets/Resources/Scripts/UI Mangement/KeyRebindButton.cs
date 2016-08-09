@@ -4,7 +4,7 @@ using System.Collections;
 public class KeyRebindButton : MonoBehaviour {
 
 	public string key;
-	private KeyCode* keyVar;
+	private KeyCode keyVar;
 
 	bool rebinding = false;
 
@@ -60,7 +60,6 @@ public class KeyRebindButton : MonoBehaviour {
 				if(Input.GetKey(vKey))
 					newKey = vKey;
 			}
-			*keyVar = newKey;
 			rebinding = false;
 		}
 	}
