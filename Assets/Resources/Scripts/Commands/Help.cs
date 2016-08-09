@@ -32,7 +32,7 @@ public class Help : CommandBase {
 					Debug.Log ("Found help command- skipping to avoid recursion");
 				} else {
 					Debug.Log ("Raw class: " + rawClass);
-					CommandBase cb = assembly.CreateInstance (rawClass)) as CommandBase;
+					CommandBase cb = assembly.CreateInstance (rawClass) as CommandBase;
 					commands.Add (cb);
 					help += cb.getInvocation().ToLower() + ": " + cb.getHelpMessage() + "\n";
 				}
