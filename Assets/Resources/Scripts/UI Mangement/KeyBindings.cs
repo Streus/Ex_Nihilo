@@ -26,7 +26,7 @@ public class KeyBindings : MonoBehaviour {
 
 	//misc
 	public static KeyCode interact;
-	public static int mvtSet;
+	public static bool mvtSet;
 
 	private string keyPath;
 
@@ -35,11 +35,6 @@ public class KeyBindings : MonoBehaviour {
 	{
 		keyPath = Application.persistentDataPath + "/keybindings.ini";
 		loadKeyBindings ();
-	}
-
-	void Awake()
-	{
-		DontDestroyOnLoad (transform.gameObject);
 	}
 	
 	// Update is called once per frame
@@ -52,7 +47,7 @@ public class KeyBindings : MonoBehaviour {
 	public void loadKeyBindings()
 	{
 		//save file doesn't exist, set to defaults and save the defaults to a new keybindings.ini
-		if (!File.Exists (keyPath)) 
+		if (!System.IO.File.Exists (keyPath)) 
 		{
 			forward = KeyCode.W;
 			backward = KeyCode.S;
@@ -67,7 +62,7 @@ public class KeyBindings : MonoBehaviour {
 			ability6 = KeyCode.Alpha6;
 			interact = KeyCode.E;
 
-			mvtSet = 0;
+			mvtSet = false;
 
 			File.Create (keyPath);
 			saveKeyBindings ();
@@ -102,7 +97,10 @@ public class KeyBindings : MonoBehaviour {
 		ability6 = (KeyCode)bindings [10];
 		interact = (KeyCode)bindings [11];
 
-		mvtSet = bindings [12];
+		if(bindings[12] == 0)
+			mvtSet = false;
+		else if(bindings[12] == 1)
+			mvtSet = true;
 	}
 
 	public void saveKeyBindings()

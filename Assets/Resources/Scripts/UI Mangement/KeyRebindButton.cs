@@ -30,6 +30,7 @@ public class KeyRebindButton : MonoBehaviour {
 			assignBinding();
 			rebinding = false;
 		}
+		recieveBinding();
 		txt.text = keyVar.ToString();
 	}
 
