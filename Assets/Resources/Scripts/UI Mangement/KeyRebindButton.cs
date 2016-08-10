@@ -13,7 +13,6 @@ public class KeyRebindButton : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log(key);
 		rebinding = false;
 		recieveBinding();
 		txt = transform.GetChild(0).GetComponent<Text>();
@@ -83,7 +82,7 @@ public class KeyRebindButton : MonoBehaviour {
 			keyVar = KeyBindings.interact;
 			break;
 		default:
-			keyVar = KeyCode.Q;
+			keyVar = KeyCode.None;
 			break;
 		}
 	}
