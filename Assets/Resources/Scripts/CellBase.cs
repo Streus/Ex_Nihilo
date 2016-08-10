@@ -2,15 +2,20 @@
 using System.Collections;
 
 public class CellBase : MonoBehaviour {
-
 	//The AI this cell is using. Keep this null for player control.
 	public BaseAI aiProgram = null;
 
 	//Below are cell-specific variables.
+	public bool controlSet;
 	public float maxSpeed;
+	public float turnSpeed;
+	private Vector2 targetCoords;
+	private Rigidbody2D physBody;
 
 	// Use this for initialization
 	void Start () {
+		//find KeyBindings object
+
 		//Look for any AI scripts
 		aiProgram = GetComponent<BaseAI> ();
 
@@ -26,25 +31,43 @@ public class CellBase : MonoBehaviour {
 		}
 
 		//Set up the cell-specific variables
-		maxSpeed = 0.075F;
+		physBody = GetComponent<Rigidbody2D> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		//If there is an AI, then run that code
 		if (aiProgram != null)
 			aiProgram.Update ();
 		else {
 			//Player control code
-			float x = transform.position.x;
-			float y = transform.position.y;
+			if (controlSet) {
+				//control set 1
+				if (Input.GetKey (KeyCode.W))
+					addMovement (maxSpeed);
+				if (Input.GetKey (KeyCode.S))
+					addMovement (-maxSpeed);
 
-			float xDiff = Input.GetAxis ("Horizontal");
-			float yDiff = Input.GetAxis ("Vertical");
+				float dRot = 0;
+				if (Input.GetKey (KeyCode.A))
+					dRot = 1;
+				if (Input.GetKey (KeyCode.D))
+					dRot = -1;
+				turn (dRot);
+			} else {
+				//control set 2
+				if (Input.GetKey (KeyCode.Mouse0))
+					targetCoords = Input.mousePosition;
 
-			moveHorizontal (xDiff);
-			moveVertical (yDiff);
-
+				if (Vector2.Distance (physBody.position, targetCoords) > maxSpeed) {
+					//move forward
+					addMovement (maxSpeed);
+					//rotate to face targetCoords
+					Vector2 dPos = physBody.position - targetCoords;
+					float targetRot = Mathf.Atan2 (dPos.y, dPos.x) * Mathf.Rad2Deg;
+					physBody.rotation = Mathf.MoveTowardsAngle (physBody.rotation, targetRot, turnSpeed);
+				}
+			}
 			centerCamera ();
 		}
 	}
@@ -57,28 +80,20 @@ public class CellBase : MonoBehaviour {
 	//Control scheme based stuff below
 
 	/**
-	 * Horizontal movement. Valid ranges: [-1, 1].
-	 * Negative values move left, positive values right.
+	 * Forward and backward movement. Valid range: [-inf, inf]
+	 * Positive values move forward, negative move backward;
 	 */
-	public void moveHorizontal(float power) {
-		if (power < -1)
-			power = -1;
-		if (power > 1)
-			power = 1;
-
-		transform.position = new Vector2 (transform.position.x + (power * maxSpeed), transform.position.y);
+	public void addMovement(float speed) {
+		physBody.AddForce (transform.right * speed);
+		//transform.position = new Vector2 (transform.position.x + (power * maxSpeed), transform.position.y);
 	}
 
 	/**
-	 * Vertical movement. Valid ranges: [-1, 1].
-	 * Negative values move down, positive values up.
+	 * Turn. Valid ranges: [-2pi, 2pi].
+	 * Negative values turn right, positive turn left.
 	 */
-	public void moveVertical(float power) {
-		if (power < -1)
-			power = -1;
-		if (power > 1)
-			power = 1;
-
-		transform.position = new Vector2 (transform.position.x, transform.position.y + (power * maxSpeed));
+	public void turn(float deltaRotation) {
+		physBody.rotation += deltaRotation * turnSpeed;
+		//transform.position = new Vector2 (transform.position.x, transform.position.y + (power * maxSpeed));
 	}
 }
