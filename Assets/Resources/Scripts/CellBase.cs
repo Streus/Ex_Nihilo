@@ -14,7 +14,8 @@ public class CellBase : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//find KeyBindings object
+		//Set up the cell-specific variables
+		physBody = GetComponent<Rigidbody2D> ();
 
 		//Look for any AI scripts
 		aiProgram = GetComponent<BaseAI> ();
@@ -29,9 +30,6 @@ public class CellBase : MonoBehaviour {
 			Game.playerControllingCell = true;
 			centerCamera ();
 		}
-
-		//Set up the cell-specific variables
-		physBody = GetComponent<Rigidbody2D> ();
 	}
 	
 	// Update is called once per frame
@@ -42,30 +40,25 @@ public class CellBase : MonoBehaviour {
 		else {
 			//Player control code
 			if (controlSet) {
-				//control set 1
-				if (Input.GetKey (KeyCode.W))
-					addMovement (maxSpeed);
-				if (Input.GetKey (KeyCode.S))
-					addMovement (-maxSpeed);
-
-				float dRot = 0;
-				if (Input.GetKey (KeyCode.A))
-					dRot = 1;
-				if (Input.GetKey (KeyCode.D))
-					dRot = -1;
-				turn (dRot);
+				addMovement(Input.GetAxis("Vertical") * maxSpeed);
+				turn(-Input.GetAxis("Horizontal") * turnSpeed);
 			} else {
 				//control set 2
-				if (Input.GetKey (KeyCode.Mouse0))
-					targetCoords = Input.mousePosition;
+				if (Input.GetKey (KeyCode.Mouse0)){
+					Vector3 mspos = Input.mousePosition;
+					mspos.z = 10f;
+					Vector3 wrldpnt = Camera.main.ScreenToWorldPoint(mspos);
+					targetCoords = new Vector2(wrldpnt.x, wrldpnt.y);
+					Debug.Log(targetCoords);
+				}
 
-				if (Vector2.Distance (physBody.position, targetCoords) > maxSpeed) {
+				if (Vector2.Distance (physBody.position, targetCoords) > 0.1f) {
 					//move forward
 					addMovement (maxSpeed);
+
 					//rotate to face targetCoords
-					Vector2 dPos = physBody.position - targetCoords;
-					float targetRot = Mathf.Atan2 (dPos.y, dPos.x) * Mathf.Rad2Deg;
-					physBody.rotation = Mathf.MoveTowardsAngle (physBody.rotation, targetRot, turnSpeed);
+					float targetRot = Vector2.Angle(physBody.position, targetCoords);
+					physBody.rotation = targetRot;
 				}
 			}
 			centerCamera ();
