@@ -15,7 +15,6 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
-------
 ### Build #38
 * Updated readme.md file - would be nice to keep this guy up to date
 
