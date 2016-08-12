@@ -3,6 +3,12 @@ using System.Collections;
 
 public class BackgroundLogic : MonoBehaviour {
 
+	//Height of the quad- should be behind the camera (< -10)
+	private static int quadHeight = -20;
+
+	//Height of the background image- should be far in BG (>> 0)
+	private static int bgHeight = 100;
+
 	/**
 	 * These are the center coordinates in "background tile units"- 
 	 * every tile takes up 10x10 real units, but only a single 1x1
@@ -16,9 +22,9 @@ public class BackgroundLogic : MonoBehaviour {
 	 * array is always odd. 
 	 * 
 	 * If this is larger, you can zoom out further without losing the 
-	 * appearance of a constant background. Default value is 3.
+	 * appearance of a constant background.
 	 */
-	public static int DIM = 3;
+	public static int DIM = 5;
 	private static int N;
 
 	/**
@@ -43,10 +49,10 @@ public class BackgroundLogic : MonoBehaviour {
 
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				//-20 is behind the camera, and so invisible.
-				//100 is far into the distance, and so is rendered in the background.
-				Vector3 quadPos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + j - DIM), -20);
-				Vector3 imagePos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + j - DIM), 100);
+				//quadHeight is behind the camera, and so invisible.
+				//bgHeight is far into the distance, and so is rendered in the background.
+				Vector3 quadPos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + j - DIM), quadHeight);
+				Vector3 imagePos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + j - DIM), bgHeight);
 
 				bgArr[i, j] = (GameObject)Instantiate(
 					Resources.Load("Prefabs/Background"),
@@ -77,8 +83,8 @@ public class BackgroundLogic : MonoBehaviour {
 
 			//create new array elements
 			for (int i = 0; i < N; i++) {
-				Vector3 quadPos = new Vector3 (10 * (cenX + DIM), 10 * (cenY + i - DIM), -20);
-				Vector3 imagePos = new Vector3 (10 * (cenX + DIM), 10 * (cenY + i - DIM), 100);
+				Vector3 quadPos = new Vector3 (10 * (cenX + DIM), 10 * (cenY + i - DIM), quadHeight);
+				Vector3 imagePos = new Vector3 (10 * (cenX + DIM), 10 * (cenY + i - DIM), bgHeight);
 
 				bgArr [N - 1, i] = (GameObject)Instantiate (
 					Resources.Load ("Prefabs/Background"),
@@ -105,8 +111,8 @@ public class BackgroundLogic : MonoBehaviour {
 
 			//create new array elements
 			for (int i = 0; i < N; i++) {
-				Vector3 quadPos = new Vector3 (10 * (cenX - DIM), 10 * (cenY + i - DIM), -20);
-				Vector3 imagePos = new Vector3 (10 * (cenX - DIM), 10 * (cenY + i - DIM), 100);
+				Vector3 quadPos = new Vector3 (10 * (cenX - DIM), 10 * (cenY + i - DIM), quadHeight);
+				Vector3 imagePos = new Vector3 (10 * (cenX - DIM), 10 * (cenY + i - DIM), bgHeight);
 
 				bgArr [0, i] = (GameObject)Instantiate (
 					Resources.Load ("Prefabs/Background"),
@@ -128,8 +134,8 @@ public class BackgroundLogic : MonoBehaviour {
 			cenY++;
 
 			for (int i = 0; i < N; i++) {
-				Vector3 quadPos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + DIM), -20);
-				Vector3 imagePos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + DIM), 100);
+				Vector3 quadPos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + DIM), quadHeight);
+				Vector3 imagePos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY + DIM), bgHeight);
 
 				bgArr [i, N - 1] = (GameObject)Instantiate (
 					Resources.Load("Prefabs/Background"),
@@ -151,8 +157,8 @@ public class BackgroundLogic : MonoBehaviour {
 			cenY--;
 
 			for (int i = 0; i < N; i++) {
-				Vector3 quadPos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY - DIM), -20);
-				Vector3 imagePos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY - DIM), 100);
+				Vector3 quadPos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY - DIM), quadHeight);
+				Vector3 imagePos = new Vector3 (10 * (cenX + i - DIM), 10 * (cenY - DIM), bgHeight);
 
 				bgArr [i, 0] = (GameObject)Instantiate (
 					Resources.Load ("Prefabs/Background"),

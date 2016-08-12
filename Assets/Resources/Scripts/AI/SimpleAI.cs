@@ -10,8 +10,12 @@ public class SimpleAI : BaseAI {
 	
 	// Update is called once per frame
 	public override void Update () {
-		cell.addMovement (1);
-		cell.turn (Random.Range(-1f, 1f));
+
+		speed += Random.Range (-0.1f, 0.1f);
+		direction += Random.Range (-0.4f, 0.4f);
+
+		cell.addMovement (speed);
+		cell.turn (direction);
 	}
 
 	public override string toString() {
