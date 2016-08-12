@@ -12,12 +12,17 @@ public class CellBase : MonoBehaviour {
 	private Vector2 targetCoords;
 	private Rigidbody2D physBody;
 
+	private float actualSpeed;
+	private float actualTurn;
+	private float t;
+
 	// Use this for initialization
 	void Start () {
-		//find KeyBindings object
-
 		//Look for any AI scripts
 		aiProgram = GetComponent<BaseAI> ();
+
+		//Set up the cell-specific variables
+		physBody = GetComponent<Rigidbody2D> ();
 
 		//If any AI scripts are found, run their init
 		if (aiProgram != null) {
@@ -29,9 +34,6 @@ public class CellBase : MonoBehaviour {
 			Game.playerControllingCell = true;
 			centerCamera ();
 		}
-
-		//Set up the cell-specific variables
-		physBody = GetComponent<Rigidbody2D> ();
 	}
 	
 	// Update is called once per frame
@@ -47,12 +49,12 @@ public class CellBase : MonoBehaviour {
 					addMovement (maxSpeed);
 				if (Input.GetKey (KeyCode.S))
 					addMovement (-maxSpeed);
-
+				
 				float dRot = 0;
 				if (Input.GetKey (KeyCode.A))
-					dRot = 1;
+					dRot = turnSpeed;
 				if (Input.GetKey (KeyCode.D))
-					dRot = -1;
+					dRot = -turnSpeed;
 				turn (dRot);
 			} else {
 				//control set 2
@@ -83,9 +85,8 @@ public class CellBase : MonoBehaviour {
 	 * Forward and backward movement. Valid range: [-inf, inf]
 	 * Positive values move forward, negative move backward;
 	 */
-	public void addMovement(float speed) {
+	public void addMovement(float speed) { 
 		physBody.AddForce (transform.right * speed);
-		//transform.position = new Vector2 (transform.position.x + (power * maxSpeed), transform.position.y);
 	}
 
 	/**
@@ -94,6 +95,5 @@ public class CellBase : MonoBehaviour {
 	 */
 	public void turn(float deltaRotation) {
 		physBody.rotation += deltaRotation * turnSpeed;
-		//transform.position = new Vector2 (transform.position.x, transform.position.y + (power * maxSpeed));
 	}
 }
