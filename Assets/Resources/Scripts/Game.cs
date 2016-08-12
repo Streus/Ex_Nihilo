@@ -27,7 +27,7 @@ public class Game : MonoBehaviour {
 			Resources.Load ("Prefabs/Round Cell Base"),
 			new Vector2 (-50 + (Random.value * 100), -50 + (Random.value * 100)),
 			Quaternion.identity);
-		obj.AddComponent<SimpleAI> ();
+		obj.AddComponent<NavigateAI> ();
 		return obj;
 	}
 
