@@ -15,15 +15,28 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #40
+* Refactored folders
+* Added a lot of infrastucture for CellBase
+* Minor code cleanup (removed some commented code)
+
+------
+### Build #39
+* Beginnings of save game support added. Back-end still needed.
+* Rebind buttons now work.
+* Can now toggle movement sets. Has yet to be hooked up to player.
+* Changed movement marker sprite.
+* Options now properly save and load.
+
 ------
 ### Build #38
 * Updated readme.md file - would be nice to keep this guy up to date
 
 ------
 ### Build #37
-* Modified the algorithm slightly to increase performance
-* Removed exponential movement speed (-> now fastest possible)
-* Removed slower turn speed (-> now fastest possible)
+* Modified cell mouse movement algorithm slightly to increase its effectiveness
+* Removed exponential movement speed from that algorithm (-> now fastest possible)
+* Removed slower turn speed from that algorithm (-> now fastest possible)
 * Added flag
 
 ------
