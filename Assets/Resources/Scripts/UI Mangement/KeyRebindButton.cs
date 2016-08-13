@@ -45,20 +45,14 @@ public class KeyRebindButton : MonoBehaviour {
 	private void recieveBinding()
 	{
 		switch (key) {
-		case "forward":
-			keyVar = KeyBindings.forward;
-			break;
-		case "backward":
-			keyVar = KeyBindings.backward;
-			break;
-		case "turnRight":
-			keyVar = KeyBindings.turnRight;
-			break;
-		case "turnLeft":
-			keyVar = KeyBindings.turnLeft;
+		case "select":
+			keyVar = KeyBindings.select;
 			break;
 		case "placeMvtMkr":
 			keyVar = KeyBindings.placeMvtMkr;
+			break;
+		case "holdGround":
+			keyVar = KeyBindings.holdGround;
 			break;
 		case "ability1":
 			keyVar = KeyBindings.ability1;
@@ -78,8 +72,20 @@ public class KeyRebindButton : MonoBehaviour {
 		case "ability6":
 			keyVar = KeyBindings.ability6;
 			break;
-		case "interact":
-			keyVar = KeyBindings.interact;
+		case "ability7":
+			keyVar = KeyBindings.ability7;
+			break;
+		case "ability8":
+			keyVar = KeyBindings.ability8;
+			break;
+		case "ability9":
+			keyVar = KeyBindings.ability9;
+			break;
+		case "ability10":
+			keyVar = KeyBindings.ability10;
+			break;
+		case "pause":
+			keyVar = KeyBindings.pause;
 			break;
 		default:
 			keyVar = KeyCode.None;
@@ -90,20 +96,14 @@ public class KeyRebindButton : MonoBehaviour {
 	private void assignBinding()
 	{
 		switch (key) {
-		case "forward":
-			KeyBindings.forward = keyVar;
-			break;
-		case "backward":
-			KeyBindings.backward = keyVar;
-			break;
-		case "turnRight":
-			KeyBindings.turnRight = keyVar;
-			break;
-		case "turnLeft":
-			KeyBindings.turnLeft = keyVar;
+		case "select":
+			KeyBindings.select = keyVar;
 			break;
 		case "placeMvtMkr":
 			KeyBindings.placeMvtMkr = keyVar;
+			break;
+		case "holdGround":
+			KeyBindings.holdGround = keyVar;
 			break;
 		case "ability1":
 			KeyBindings.ability1 = keyVar;
@@ -123,8 +123,20 @@ public class KeyRebindButton : MonoBehaviour {
 		case "ability6":
 			KeyBindings.ability6 = keyVar;
 			break;
-		case "interact":
-			KeyBindings.interact = keyVar;
+		case "ability7":
+			KeyBindings.ability7 = keyVar;
+			break;
+		case "ability8":
+			KeyBindings.ability8 = keyVar;
+			break;
+		case "ability9":
+			KeyBindings.ability9 = keyVar;
+			break;
+		case "ability10":
+			KeyBindings.ability10 = keyVar;
+			break;
+		case "pause":
+			KeyBindings.pause = keyVar;
 			break;
 		default:
 			keyVar = KeyCode.None;
