@@ -18,6 +18,7 @@ Example: [Google](https://www.google.com)
 ### Build #44
 * Made a small fix to GameManager
 
+------
 ### Build #43
 * Refactored folders
 * Added a lot of infrastucture for CellBase
