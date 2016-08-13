@@ -15,6 +15,9 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #44
+* Made a small fix to GameManager
+
 ### Build #43
 * Refactored folders
 * Added a lot of infrastucture for CellBase
