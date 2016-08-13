@@ -81,7 +81,7 @@ public class CellBase : MonoBehaviour {
 					if (flag != null) 
 						Destroy (flag);
 					flag = (GameObject)Instantiate (Resources.Load ("Prefabs/Flag"), 
-						new Vector2 (wrldpnt.x + 0.3f, wrldpnt.y + 0.55f),
+						new Vector2 (wrldpnt.x, wrldpnt.y),
 						Quaternion.identity);
 				}
 
