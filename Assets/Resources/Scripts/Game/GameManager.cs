@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
 		PlayerPrefs.SetInt("keybackward", (int)KeyBindings.backward);
 		PlayerPrefs.SetInt("keyturnR", (int)KeyBindings.turnRight);
 		PlayerPrefs.SetInt("keyturnL", (int)KeyBindings.turnLeft);
-		PlayerPrefs.SetInt("keyplacemvtmkr", (int)KeyBindings.backward);
+		PlayerPrefs.SetInt("keyplacemvtmkr", (int)KeyBindings.placeMvtMkr);
 		PlayerPrefs.SetInt("keyability1", (int)KeyBindings.ability1);
 		PlayerPrefs.SetInt("keyability2", (int)KeyBindings.ability2);
 		PlayerPrefs.SetInt("keyability3", (int)KeyBindings.ability3);
