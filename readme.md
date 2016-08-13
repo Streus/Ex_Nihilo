@@ -15,6 +15,18 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #49
+* Made left-click selection GUI work
+* Added "selection" arraylist that holds every CellBase-attached GameObject within the current selection
+* Began work on support for controlling multiple cells
+* Added more static Game methods (filterBy, getBetween)
+
+------
+### Build #46
+* Removed 'Tank' control scheme support
+* Fleshed out 'Click to move' control scheme support
+
+------
 ### Build #45
 * Added in cleaner way to add GameObjects to the world (currently in beta) - Game.create()
 * Removed WASD controls
@@ -83,3 +95,106 @@ Example: [Google](https://www.google.com)
 ------
 ### Build #26
 * Updated Dev Console
+
+------
+### Build #25
+* Progress on Key Rebinding
+
+------
+### Build #24
+* Finished up command infrastructure
+
+------
+### Build #23
+* Unborked the dev console removal
+
+------
+### Build #21
+* Minor changes to dev console
+
+------
+### Build #20
+* Minor hotfixes
+
+------
+### Build #19
+* Command/dev console hotfix (allows successful compilation)
+
+------
+### Build #18
+* Added persistent dev console
+
+------
+### Build #17
+* Pushed the basic infrastructure for commands - waiting for the dev console to be finished for more
+
+------
+### Build #16
+* Hotfix and work on persistence support
+
+------
+### Build #15
+* Fixes to dev consle and started work on commands
+
+------
+### Build #14
+* Minor changes
+
+------
+### Build #13
+* Added basic background logic (unfinished)
+
+------
+### Build #12
+* Key rebinding started
+
+------
+### Build #11
+* Added dev console
+
+------
+### Build #10
+* Added basic mesh deformation prototype work - see the "JellyPhysics" scene
+
+------
+### Build #9
+* GUI edited and added to
+
+------
+### Build #8
+* "The Great Re-Wording" - removed plans for both a Simulation and Sandbox game modes. Now we are not creating a simulation.
+
+------
+### Build #7
+* Removed extra header files
+
+------
+### Build #6
+* "Fixed the brock" - readded a deleted main menu controller
+
+------
+### Build #5
+* Adding backend support
+* Added AI support
+* Gameplay changes
+* Changes to cell backend
+
+------
+### Build #4
+* Frontend mostly completed
+
+------
+### Build #3
+* Basic main menu added
+
+------
+### Build #2
+* Work started on game proper
+* Added base cell prefab
+* Added base AI
+* Added camera controls
+
+------
+### Build #1
+* Made the skybox color grey
+* (Github commit/merge workflow test)
