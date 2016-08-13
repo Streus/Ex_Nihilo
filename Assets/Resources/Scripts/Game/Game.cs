@@ -92,11 +92,46 @@ public class Game : MonoBehaviour {
 	/**
 	 * Searches by the given Component and returns all GameObjects that include it
 	 */
-	public static ArrayList search(Component com) {
+	public static ArrayList filterBy(Component com) {
 		ArrayList toReturn = new ArrayList ();
 		for (int i = 0; i < objects.Count; i++)
-			if (((GameObject)toReturn [i]).GetComponent(com.GetType()) != null)
-				toReturn.Add (toReturn [i]);
+			if (((GameObject)objects [i]).GetComponent(com.GetType()) != null)
+				toReturn.Add (objects [i]);
+		return toReturn;
+	}
+
+	/**
+	 * Searches by the given Component and returns all GameObjects that include it
+	 */
+	public static ArrayList filterBy<T>(ArrayList list) {
+		ArrayList toReturn = new ArrayList ();
+		for (int i = 0; i < list.Count; i++)
+			if (((GameObject)list [i]).GetComponent<T>() != null)
+				toReturn.Add (list [i]);
+		return toReturn;
+	}
+
+	/**
+	 * Gets all of the GameObjects of a type within a rectangle defined by
+	 * the two points "first" and "second"
+	 */
+	public static ArrayList getBetween(Vector2 first, Vector2 second) {
+		return getBetween (
+			Mathf.Min (first.x, second.x),
+			Mathf.Min (first.y, second.y),
+			Mathf.Max (first.x, second.x),
+			Mathf.Max (first.y, second.y));
+	}
+
+	public static ArrayList getBetween(float xMin, float yMin, float xMax, float yMax) {
+		//Debug.Log ("Searching in " + xMin + ", " + yMin + " and " + xMax + ", " + yMax);
+		ArrayList toReturn = new ArrayList ();
+		for (int i = 0; i < objects.Count; i++) {
+			Vector2 pos = ((GameObject)objects [i]).transform.position;
+			if (pos.x > xMin && pos.x < xMax && pos.y > yMin && pos.y < yMax) {
+					toReturn.Add (objects[i]);
+			}
+		}
 		return toReturn;
 	}
 }
