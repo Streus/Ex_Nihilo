@@ -15,6 +15,11 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #44
+* Added in cleaner way to add GameObjects to the world (currently in beta) - Game.create()
+* Removed WASD controls
+* Fixed RMB camera panning when controlling a cell
+
 ### Build #43
 * Refactored folders
 * Added a lot of infrastucture for CellBase

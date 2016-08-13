@@ -12,7 +12,7 @@ public class NavigateAI : BaseAI {
 
 		cell.turn (Random.Range (0f, Mathf.PI * 2));
 
-		cell.maxSpeed *= 0.4f;
+		//cell.maxSpeed *= 0.4f;
 		//cell.turnSpeed *= 0.4f;
 	}
 

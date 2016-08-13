@@ -28,8 +28,6 @@ public class CellBase : MonoBehaviour {
 
 	//~~Gameplay specific variables~~/
 
-	public bool controlSet; //true for WASD, false for click to move
-
 	public static GameObject flag; //movement flag
 
 	// Use this for initialization
@@ -49,12 +47,10 @@ public class CellBase : MonoBehaviour {
 
 		//If any AI scripts are found, run their init
 		if (aiProgram != null) {
-			Game.playerControllingCell = false;
 			aiProgram.setCell (this);
 			aiProgram.Start ();
 		} else {
 			//If no AI, then player control init
-			Game.playerControllingCell = true;
 			centerCamera ();
 		}
 	}
@@ -66,36 +62,19 @@ public class CellBase : MonoBehaviour {
 			aiProgram.Update ();
 		else {
 			//Player control code
-			if (controlSet) {
-				//control set 1
-				if (Input.GetKey (KeyCode.W))
-					move (maxSpeed);
-				if (Input.GetKey (KeyCode.S))
-					move (-maxSpeed);
-				
-				float dRot = 0;
-				if (Input.GetKey (KeyCode.A))
-					dRot = turnSpeed;
-				if (Input.GetKey (KeyCode.D))
-					dRot = -turnSpeed;
-				turn (dRot);
-			} else {
-				//control set 2
+			//Pull in mouse input and assign the variables
+			if (Input.GetKey (KeyBindings.placeMvtMkr)){
+				Vector3 wrldpnt = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				targetCoords = new Vector2 (wrldpnt.x, wrldpnt.y);
 
-				//Pull in mouse input and assign the variables
-				if (Input.GetKey (KeyCode.Mouse0)){
-					Vector3 wrldpnt = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-					targetCoords = new Vector2 (wrldpnt.x, wrldpnt.y);
-
-					if (flag != null) 
-						Destroy (flag);
-					flag = (GameObject)Instantiate (Resources.Load ("Prefabs/Flag"), 
-						new Vector2 (wrldpnt.x, wrldpnt.y),
-						Quaternion.identity);
-				}
-
-				navigateTo (targetCoords.x, targetCoords.y);
+				if (flag != null) 
+					Destroy (flag);
+				flag = (GameObject)Instantiate (Resources.Load ("Prefabs/Flag"), 
+					new Vector2 (wrldpnt.x, wrldpnt.y),
+					Quaternion.identity);
 			}
+
+			navigateTo (targetCoords.x, targetCoords.y);
 			centerCamera ();
 
 			//Update key variables
@@ -112,7 +91,7 @@ public class CellBase : MonoBehaviour {
 						newPos.y += (physBody.velocity.y * del) + (size * Mathf.Sin (Mathf.Deg2Rad * (i + rotation)));
 						attached [i].transform.position = newPos;
 
-						Quaternion newRot = Quaternion.Euler(0, 0, rotation);
+						Quaternion newRot = Quaternion.Euler(0, 0, rotation + i + 180);
 						attached [i].transform.rotation = newRot;
 						//attached[i].transform.Rotate(0, 0, rotation);
 					}
@@ -237,7 +216,6 @@ public class CellBase : MonoBehaviour {
 	public void attach(GameObject obj, int angle) {
 		if (angle < 0 || angle > 359)
 			return;
-		Debug.Log (angle);
 		attached [angle] = obj;
 
 		//For other cell base shapes, we need a different calculation (+ a variable
@@ -248,5 +226,9 @@ public class CellBase : MonoBehaviour {
 			newPos.y += Mathf.Sin (Mathf.Deg2Rad * angle);
 			obj.transform.position = newPos;
 		}
+	}
+
+	public void attach(string name, int angle) {
+		attach (Game.create (name), angle);
 	}
 }

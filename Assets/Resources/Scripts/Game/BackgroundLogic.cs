@@ -24,7 +24,7 @@ public class BackgroundLogic : MonoBehaviour {
 	 * If this is larger, you can zoom out further without losing the 
 	 * appearance of a constant background.
 	 */
-	public static int DIM = 5;
+	public static int DIM = 12;
 	private static int N;
 
 	/**
