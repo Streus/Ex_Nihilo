@@ -15,13 +15,13 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
-### Build #40
+### Build #43
 * Refactored folders
 * Added a lot of infrastucture for CellBase
 * Minor code cleanup (removed some commented code)
 
 ------
-### Build #39
+### Build #42
 * Beginnings of save game support added. Back-end still needed.
 * Rebind buttons now work.
 * Can now toggle movement sets. Has yet to be hooked up to player.
