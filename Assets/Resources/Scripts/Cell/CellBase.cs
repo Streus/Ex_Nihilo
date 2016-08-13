@@ -21,10 +21,24 @@ public class CellBase : MonoBehaviour {
 	private Vector2 targetCoords; //for click-to-move
 	private Rigidbody2D physBody; //for physics calculations
 
+	private Vector2 anchorPoint;   //Where the user right-clicks to select
+	private Vector2 clickPoint;    //Where the user is currently right-clicking
+
 	public GameObject[] attached = new GameObject[360]; //what is attached to us?
 
 	//The AI this cell is using. Keep this null for player control.
 	public BaseAI aiProgram = null;
+
+	//Selection overlay options below
+	public static Color selectMainColor = new Color(1, 1, 1, 0.3f); //internal color
+	public static Color selectTrimColor = new Color(0, 0, 0, 0.3f); //edge color
+
+	private static Texture2D selectMainTex;
+	private static Texture2D selectTrimTex;
+
+	public static int trimWidth = 3; //how wide are the edges?
+
+	private static ArrayList selection;
 
 	//~~Gameplay specific variables~~/
 
@@ -35,6 +49,8 @@ public class CellBase : MonoBehaviour {
 		//Set up the cell-specific variables
 		targetCoords = new Vector2 (0, 0);
 		physBody = GetComponent<Rigidbody2D> ();
+
+		clickPoint = new Vector2(0, 0);
 
 		position = transform.position;
 		rotation = transform.rotation.eulerAngles.z;
@@ -53,6 +69,15 @@ public class CellBase : MonoBehaviour {
 			//If no AI, then player control init
 			centerCamera ();
 		}
+
+		//Selection overlay
+		selectMainTex = new Texture2D (1, 1);
+		selectMainTex.SetPixel (0, 0, selectMainColor);
+		selectMainTex.Apply ();
+
+		selectTrimTex = new Texture2D (1, 1);
+		selectTrimTex.SetPixel (0, 0, selectTrimColor);
+		selectTrimTex.Apply ();
 	}
 	
 	// Update is called once per frame
@@ -60,9 +85,26 @@ public class CellBase : MonoBehaviour {
 		//If there is an AI, then run that code
 		if (aiProgram != null)
 			aiProgram.Update ();
-		else {
-			//Player control code
-			//Pull in mouse input and assign the variables
+		else { //Player control code
+			if(Input.GetKey(KeyBindings.select)) {
+				Vector2 mousePoint = Input.mousePosition;
+				if (anchorPoint.x == 0 && anchorPoint.y == 0)
+					anchorPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
+
+				clickPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
+
+				selection = Game.getBetween (
+					Camera.main.ScreenToWorldPoint(anchorPoint), 
+					Camera.main.ScreenToWorldPoint(clickPoint));
+				selection = Game.filterBy<CellBase> (selection);
+			} else { //unbind after click released
+				selection = new ArrayList(); //clear selection
+				anchorPoint.x = 0;
+				anchorPoint.y = 0;
+			}
+
+			Debug.Log ("Selecting " + selection.Count + " cell objects.");
+
 			if (Input.GetKey (KeyBindings.placeMvtMkr)){
 				Vector3 wrldpnt = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 				targetCoords = new Vector2 (wrldpnt.x, wrldpnt.y);
@@ -97,6 +139,25 @@ public class CellBase : MonoBehaviour {
 					}
 				}
 			}
+		}
+	}
+
+	void OnGUI() {
+		if (anchorPoint.x != 0 && anchorPoint.y != 0) {
+			float minX = Mathf.Min (anchorPoint.x, clickPoint.x);
+			float minY = Mathf.Min (anchorPoint.y, clickPoint.y);
+
+			float width = Mathf.Abs (anchorPoint.x - clickPoint.x);
+			float height = Mathf.Abs (anchorPoint.y - clickPoint.y);
+
+			//Draw the base
+			GUI.DrawTexture (new Rect (minX, minY, width, height), selectMainTex);
+
+			//Draw the outline
+			GUI.DrawTexture(new Rect(minX, minY, trimWidth, height), selectTrimTex);
+			GUI.DrawTexture(new Rect(minX + trimWidth, minY + height - trimWidth, width - (2 * trimWidth), trimWidth), selectTrimTex);
+			GUI.DrawTexture(new Rect(minX + width - trimWidth, minY, trimWidth, height), selectTrimTex);
+			GUI.DrawTexture(new Rect(minX + trimWidth, minY, width - (2 * trimWidth), trimWidth), selectTrimTex);
 		}
 	}
 
