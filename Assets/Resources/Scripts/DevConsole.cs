@@ -46,7 +46,7 @@ public class DevConsole : MonoBehaviour {
 		commands = new ArrayList();
 
 		string baseDir = Directory.GetCurrentDirectory ();
-		string[] files = Directory.GetFiles(baseDir + "/Assets/Resources/Scripts/Commands");
+		string[] files = Directory.GetFiles(baseDir + "/Assets/Resources/Scripts/Command");
 		foreach(string s in files) {
 			if (s.EndsWith ("cs")) {
 				int start = 1 + Mathf.Max (s.LastIndexOf ('/'), s.LastIndexOf ('\\'));

@@ -10,7 +10,8 @@ public class Game : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		spawn (new Vector2 (0, 0), Quaternion.identity);
+		CellBase mover = spawn (new Vector2 (0, 0), Quaternion.identity).GetComponent<CellBase>();
+		mover.attach ((GameObject)Instantiate (Resources.Load ("Prefabs/Cell Flagella")), 180);
 
 		for (int i = 0; i < 100; i++) {
 			spawnAI ();
