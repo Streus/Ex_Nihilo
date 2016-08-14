@@ -15,6 +15,13 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #51
+* CellBase movement code now migrated to "Movement" class
+* Generalized movement code to allow for many cells, all grouped around their mutual center of position
+* Removed camera panning control (until multiple cell selection design is finalized)
+* Removed flag spawning temporarily due to a bug in Game.destroy() method not properly removing references to deleted objects
+
+------
 ### Build #49
 * Made left-click selection GUI work
 * Added "selection" arraylist that holds every CellBase-attached GameObject within the current selection
