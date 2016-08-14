@@ -6,6 +6,9 @@ public class Game : MonoBehaviour {
 	//Is the player controlling a cell?
 	public static bool playerControllingCell = false;	
 
+	//What is the player currently in control of?
+	public static ArrayList controlled = new ArrayList();
+
 	//A list of all the gameobjects loaded in via create()
 	public static ArrayList objects = new ArrayList();
 
@@ -14,7 +17,7 @@ public class Game : MonoBehaviour {
 		//CellBase mover = spawn (new Vector2 (0, 0), Quaternion.identity).GetComponent<CellBase>();
 		//mover.attach ((GameObject)Instantiate (Resources.Load ("Prefabs/Cell Flagella")), 180);
 
-		CellBase mover = create ("Round Cell Base").GetComponent<CellBase>();
+		CellBase mover = create ("Round Cell Base", 0, 0).GetComponent<CellBase>();
 		mover.attach ("Cell Flagella", 180);
 		
 
@@ -35,7 +38,7 @@ public class Game : MonoBehaviour {
 	 * Creates a GameObject of type "name"
 	 */
 	public static GameObject create(string name) {
-		GameObject obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + name));
+		GameObject obj = (GameObject)Instantiate (Resources.Load ("Prefabs/" + name), new Vector2(0, 0), Quaternion.identity);
 		objects.Add (obj);
 		return obj;
 	}
@@ -90,6 +93,15 @@ public class Game : MonoBehaviour {
 	}
 
 	/**
+	 * Removes the provided GameObject
+	 */
+	public static void destroy(GameObject to) {
+		objects.Remove (to);
+		Destroy (to);
+		objects.Remove (null);
+	}
+
+	/**
 	 * Searches by the given Component and returns all GameObjects that include it
 	 */
 	public static ArrayList filterBy(Component com) {
@@ -124,12 +136,13 @@ public class Game : MonoBehaviour {
 	}
 
 	public static ArrayList getBetween(float xMin, float yMin, float xMax, float yMax) {
-		//Debug.Log ("Searching in " + xMin + ", " + yMin + " and " + xMax + ", " + yMax);
+		Debug.Log ("Searching in " + xMin + ", " + yMin + " and " + xMax + ", " + yMax);
 		ArrayList toReturn = new ArrayList ();
 		for (int i = 0; i < objects.Count; i++) {
 			Vector2 pos = ((GameObject)objects [i]).transform.position;
 			if (pos.x > xMin && pos.x < xMax && pos.y > yMin && pos.y < yMax) {
-					toReturn.Add (objects[i]);
+				//Debug.Log ("Object at position " + i + " is " + pos);
+				toReturn.Add (objects[i]);
 			}
 		}
 		return toReturn;

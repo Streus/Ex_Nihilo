@@ -31,15 +31,17 @@ public class CameraControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//If the RMB is down, and player is not in a cell, pan around
-		if (!Game.playerControllingCell) {
-			if (Input.GetKey ("mouse 1")) {
+		//if (!Game.playerControllingCell) {
+		/*
+			if (Input.GetKey (KeyBindings.placeMvtMkr)) {
 				float x = Input.GetAxis ("Mouse X") * zoom * xDamp;
 				float y = Input.GetAxis ("Mouse Y") * zoom * yDamp;
 
 				xOffset += x;
 				yOffset += y;
 			}
-		}
+			*/
+		//}
 
 		//If the scrollwheel is moved, zoom
 		float scroll = Input.GetAxis ("Mouse ScrollWheel");

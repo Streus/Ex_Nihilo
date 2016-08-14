@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CellBase : MonoBehaviour {
 	//~~Cell definition variables~~//
+	public bool isPlayerControlling;
 
 	public Shape shape = Shape.Circle; //one of the enums below
 	public enum Shape {Circle};
@@ -13,44 +14,28 @@ public class CellBase : MonoBehaviour {
 	public float maxSpeed = 10f;   
 	public float turnSpeed = 10f;  //max turn speed in radians/frame
 
+	public Vector2 targetCoords = new Vector2(0, 0);
+
 	public Vector2 position; //x, y position
 	public float rotation;   //rotation (in radians)
 
 	//~~Internal logic variables~~//
 
-	private Vector2 targetCoords; //for click-to-move
+	//private Vector2 targetCoords; //for click-to-move
 	private Rigidbody2D physBody; //for physics calculations
-
-	private Vector2 anchorPoint;   //Where the user right-clicks to select
-	private Vector2 clickPoint;    //Where the user is currently right-clicking
 
 	public GameObject[] attached = new GameObject[360]; //what is attached to us?
 
 	//The AI this cell is using. Keep this null for player control.
 	public BaseAI aiProgram = null;
 
-	//Selection overlay options below
-	public static Color selectMainColor = new Color(1, 1, 1, 0.3f); //internal color
-	public static Color selectTrimColor = new Color(0, 0, 0, 0.3f); //edge color
-
-	private static Texture2D selectMainTex;
-	private static Texture2D selectTrimTex;
-
-	public static int trimWidth = 3; //how wide are the edges?
-
-	private static ArrayList selection;
-
 	//~~Gameplay specific variables~~/
-
-	public static GameObject flag; //movement flag
 
 	// Use this for initialization
 	void Start () {
 		//Set up the cell-specific variables
-		targetCoords = new Vector2 (0, 0);
+		//targetCoords = new Vector2 (0, 0);
 		physBody = GetComponent<Rigidbody2D> ();
-
-		clickPoint = new Vector2(0, 0);
 
 		position = transform.position;
 		rotation = transform.rotation.eulerAngles.z;
@@ -61,112 +46,49 @@ public class CellBase : MonoBehaviour {
 		//Set up the cell-specific variables
 		physBody = GetComponent<Rigidbody2D> ();
 
-		//If any AI scripts are found, run their init
+		//If any AI scripts are found, pass them this cell as a reference
 		if (aiProgram != null) {
+			isPlayerControlling = false;
 			aiProgram.setCell (this);
-			aiProgram.Start ();
 		} else {
 			//If no AI, then player control init
-			centerCamera ();
+			isPlayerControlling = true;
 		}
-
-		//Selection overlay
-		selectMainTex = new Texture2D (1, 1);
-		selectMainTex.SetPixel (0, 0, selectMainColor);
-		selectMainTex.Apply ();
-
-		selectTrimTex = new Texture2D (1, 1);
-		selectTrimTex.SetPixel (0, 0, selectTrimColor);
-		selectTrimTex.Apply ();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		//If there is an AI, then run that code
-		if (aiProgram != null)
-			aiProgram.Update ();
-		else { //Player control code
-			if(Input.GetKey(KeyBindings.select)) {
-				Vector2 mousePoint = Input.mousePosition;
-				if (anchorPoint.x == 0 && anchorPoint.y == 0)
-					anchorPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
+		//If an AI is attached, it will update itself as needed.
 
-				clickPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
+		//Update key variables every frame
+		position = transform.position;
+		rotation = transform.rotation.eulerAngles.z;
 
-				selection = Game.getBetween (
-					Camera.main.ScreenToWorldPoint(anchorPoint), 
-					Camera.main.ScreenToWorldPoint(clickPoint));
-				selection = Game.filterBy<CellBase> (selection);
-			} else { //unbind after click released
-				selection = new ArrayList(); //clear selection
-				anchorPoint.x = 0;
-				anchorPoint.y = 0;
-			}
+		for (int i = 0; i < attached.Length; i++) {
+			if (attached [i] != null) {
+				if (shape == Shape.Circle) {
+					Vector2 newPos = position;
 
-			Debug.Log ("Selecting " + selection.Count + " cell objects.");
+					float del = Time.deltaTime;
+					newPos.x += (physBody.velocity.x * del) + (size * Mathf.Cos (Mathf.Deg2Rad * (i + rotation)));
+					newPos.y += (physBody.velocity.y * del) + (size * Mathf.Sin (Mathf.Deg2Rad * (i + rotation)));
 
-			if (Input.GetKey (KeyBindings.placeMvtMkr)){
-				Vector3 wrldpnt = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-				targetCoords = new Vector2 (wrldpnt.x, wrldpnt.y);
-
-				if (flag != null) 
-					Destroy (flag);
-				flag = (GameObject)Instantiate (Resources.Load ("Prefabs/Flag"), 
-					new Vector2 (wrldpnt.x, wrldpnt.y),
-					Quaternion.identity);
-			}
-
-			navigateTo (targetCoords.x, targetCoords.y);
-			centerCamera ();
-
-			//Update key variables
-			position = transform.position;
-			rotation = transform.rotation.eulerAngles.z;
-
-			for (int i = 0; i < 360; i++) {
-				if (attached [i] != null) {
-					if (shape == Shape.Circle) {
-						Vector2 newPos = position;
-
-						float del = Time.deltaTime;
-						newPos.x += (physBody.velocity.x * del) + (size * Mathf.Cos (Mathf.Deg2Rad * (i + rotation)));
-						newPos.y += (physBody.velocity.y * del) + (size * Mathf.Sin (Mathf.Deg2Rad * (i + rotation)));
-						attached [i].transform.position = newPos;
-
-						Quaternion newRot = Quaternion.Euler(0, 0, rotation + i + 180);
-						attached [i].transform.rotation = newRot;
-						//attached[i].transform.Rotate(0, 0, rotation);
-					}
+					//Reposition and rotate attached objects
+					attached [i].transform.position = newPos;
+					attached [i].transform.rotation = Quaternion.Euler (0, 0, rotation + i + 180);
 				}
 			}
 		}
 	}
 
-	void OnGUI() {
-		if (anchorPoint.x != 0 && anchorPoint.y != 0) {
-			float minX = Mathf.Min (anchorPoint.x, clickPoint.x);
-			float minY = Mathf.Min (anchorPoint.y, clickPoint.y);
-
-			float width = Mathf.Abs (anchorPoint.x - clickPoint.x);
-			float height = Mathf.Abs (anchorPoint.y - clickPoint.y);
-
-			//Draw the base
-			GUI.DrawTexture (new Rect (minX, minY, width, height), selectMainTex);
-
-			//Draw the outline
-			GUI.DrawTexture(new Rect(minX, minY, trimWidth, height), selectTrimTex);
-			GUI.DrawTexture(new Rect(minX + trimWidth, minY + height - trimWidth, width - (2 * trimWidth), trimWidth), selectTrimTex);
-			GUI.DrawTexture(new Rect(minX + width - trimWidth, minY, trimWidth, height), selectTrimTex);
-			GUI.DrawTexture(new Rect(minX + trimWidth, minY, width - (2 * trimWidth), trimWidth), selectTrimTex);
-		}
-	}
-
-	void centerCamera() {
-		//"deltaTime" is the amount of time passed since the last frame.
-		//Multiplying this by the velocity smoothes out the laggy camera.
-		float del = Time.deltaTime;
-		CameraControl.xOffset = transform.position.x + (physBody.velocity.x * del);
-		CameraControl.yOffset = transform.position.y + (physBody.velocity.y * del);
+	/**
+	 * Is a player controlling this cell?
+	 * Set to true if so, false otherwise. 
+	 */
+	public void setPlayerControl(bool to) {
+		isPlayerControlling = to;
+		if (aiProgram != null) //disable AI if needed
+			aiProgram.enabled = !to;
 	}
 
 	//Control scheme based stuff below
@@ -199,6 +121,10 @@ public class CellBase : MonoBehaviour {
 	 */
 	public bool navigateTo(float x, float y) {
 		bool toReturn = false;
+
+		if (x == 0 && y == 0)
+			return true;
+
 		targetCoords = new Vector2 (x, y); 
 
 		/*
