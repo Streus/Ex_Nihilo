@@ -15,6 +15,13 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #49
+* Made left-click selection GUI work
+* Added "selection" arraylist that holds every CellBase-attached GameObject within the current selection
+* Began work on support for controlling multiple cells
+* Added more static Game methods (filterBy, getBetween)
+
+------
 ### Build #46
 * Removed 'Tank' control scheme support
 * Fleshed out 'Click to move' control scheme support
