@@ -11,7 +11,7 @@ public class CameraControl : MonoBehaviour {
 	public static float yOffset;
 
 	//Height above the game arena
-	private static float zoom;
+	public static float zoom;
 
 	private static float xDamp;
 	private static float yDamp;

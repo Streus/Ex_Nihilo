@@ -116,12 +116,43 @@ public class Movement : MonoBehaviour {
 
 			//calculate center position, velocity, and camera pos - unchanged if none selected
 			computeCenter();
-			if (Game.controlled.Count != 0) 
+			//Locked camera- camera position is based on cell selection
+			if (Game.controlled.Count != 0 && GameOptions.lockedCamera) 
 				centerCamera ();
 		}
 
+		//Unlocked camera- pan based on distance to edge of screen
+		if (!GameOptions.lockedCamera) {
+			float x = Input.mousePosition.x;
+			float y = Input.mousePosition.y;
+
+			//Limit the camera pan speed
+			if (x < 0)
+				x = 0;
+			if (x > Screen.width)
+				x = Screen.width;
+			if (y < 0)
+				y = 0;
+			if (y > Screen.height)
+				y = Screen.height;
+
+			float pan = GameOptions.panBorderSize;
+			float speed = GameOptions.panSpeed;
+
+			//NOTE: When zoom is removed, change the default pan speed to compensate.
+			if (x < GameOptions.panBorderSize)
+				CameraControl.xOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (x - pan) / pan * speed;
+			else if (x > Screen.width - GameOptions.panBorderSize)
+				CameraControl.xOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.width - x - pan) / pan * speed;
+
+			if (y < GameOptions.panBorderSize)
+				CameraControl.yOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (y - pan) / pan * speed;
+			else if (y > Screen.height - GameOptions.panBorderSize)
+				CameraControl.yOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.height - y - pan) / pan * speed;
+		}
+
 		//player is in control of at least one cell
-		if (Game.playerControllingCell) {
+		if (Game.playerControllingCell) { 
 			//movement logic
 			if (Input.GetKey (KeyBindings.placeMvtMkr)) {
 				Vector3 wrldpnt = Camera.main.ScreenToWorldPoint (Input.mousePosition);
