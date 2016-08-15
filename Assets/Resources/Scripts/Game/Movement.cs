@@ -136,19 +136,20 @@ public class Movement : MonoBehaviour {
 			if (y > Screen.height)
 				y = Screen.height;
 
-			float pan = GameOptions.panBorderSize;
+			float panX = GameOptions.panBorderSize * Screen.width;
+			float panY = GameOptions.panBorderSize * Screen.height;
 			float speed = GameOptions.panSpeed;
 
 			//NOTE: When zoom is removed, change the default pan speed to compensate.
-			if (x < GameOptions.panBorderSize)
-				CameraControl.xOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (x - pan) / pan * speed;
-			else if (x > Screen.width - GameOptions.panBorderSize)
-				CameraControl.xOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.width - x - pan) / pan * speed;
+			if (x < panX)
+				CameraControl.xOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (x - panX) / panX * speed;
+			else if (x > Screen.width - panX)
+				CameraControl.xOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.width - x - panX) / panX * speed;
 
-			if (y < GameOptions.panBorderSize)
-				CameraControl.yOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (y - pan) / pan * speed;
-			else if (y > Screen.height - GameOptions.panBorderSize)
-				CameraControl.yOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.height - y - pan) / pan * speed;
+			if (y < panY)
+				CameraControl.yOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (y - panY) / panY * speed;
+			else if (y > Screen.height - panY)
+				CameraControl.yOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.height - y - panY) / panY * speed;
 		}
 
 		//player is in control of at least one cell
