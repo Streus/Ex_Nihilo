@@ -15,6 +15,11 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #56
+* Pan Speed, Pan Border Size, and Camera Lock options added.
+
+------
+
 ### Build #55
 * If Game.playerControllingCell = false, then none of the movement scripts work. This fix makes selection always work, and movement work only if Game.playerControllingCell, as well as sets that variable properly.
 * Added configuration methods for Movement class
