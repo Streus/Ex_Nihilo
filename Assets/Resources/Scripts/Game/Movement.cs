@@ -10,13 +10,13 @@ public class Movement : MonoBehaviour {
 	private static Vector2 clickPoint  = new Vector2(0, 0); //Where the user is currently right-clicking
 
 	//Selection overlay options below
-	private static Color selectMainColor = new Color(1, 1, 1, 0.3f); //internal color
-	private static Color selectTrimColor = new Color(0, 0, 0, 0.3f); //edge color
+	private static Color selectMainColor; //internal color
+	private static Color selectTrimColor; //edge color
 
 	private static Texture2D selectMainTex;
 	private static Texture2D selectTrimTex;
 
-	public static int trimWidth = 3; //how wide are the edges?
+	public static int trimWidth; //how wide are the edges?
 
 	//Movement variables
 	public static Vector2 averagePos = new Vector2 (0, 0); //center-of-mass position
@@ -31,79 +31,97 @@ public class Movement : MonoBehaviour {
 
 	void Start() {
 		//Selection overlay init
+		setSelectMainColor(new Color(1, 1, 1, 0.3f));
+		setSelectTrimColor(new Color(0, 0, 0, 0.3f));
+		setSelectTrimWidth (3);
+	}
+
+	public void setSelectMainColor(Color col) {
+		selectMainColor = col;
+
 		selectMainTex = new Texture2D (1, 1);
 		selectMainTex.SetPixel (0, 0, selectMainColor);
 		selectMainTex.Apply ();
+	}
+
+	public void setSelectTrimColor (Color col) {
+		selectTrimColor = col;
 
 		selectTrimTex = new Texture2D (1, 1);
 		selectTrimTex.SetPixel (0, 0, selectTrimColor);
 		selectTrimTex.Apply ();
 	}
 
+	public void setSelectTrimWidth(int to) {
+		trimWidth = to;
+	}
+
 	// Update is called once per frame
 	void Update () {
-		//player is in control of at least one cell
-		if (Game.playerControllingCell) {
-			
-			//selection UI and logic
-			if(Input.GetKey(KeyBindings.select)) {
-				Vector2 mousePoint = Input.mousePosition;
-				if (anchorPoint.x == 0 && anchorPoint.y == 0)
-					anchorPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
+		//selection UI and logic
+		if(Input.GetKey(KeyBindings.select)) {
+			Vector2 mousePoint = Input.mousePosition;
+			if (anchorPoint.x == 0 && anchorPoint.y == 0)
+				anchorPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
 
-				clickPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
+			clickPoint = new Vector2 (mousePoint.x, Screen.height - mousePoint.y);
 
-				//Reset currently selected cells
-				for(int i = 0; i < selection.Count; i++) 
-					(selection [i] as GameObject).GetComponent<CellBase> ().setPlayerControl (false);
+			//Reset currently selected cells
+			for(int i = 0; i < selection.Count; i++) 
+				(selection [i] as GameObject).GetComponent<CellBase> ().setPlayerControl (false);
 
-				//The y input for ScreenToWorldPoint is calculated from the bottom-left instead of top-left.
-				//To correct for this, we have to flip the y coordinate about the Screen height.
-				Vector2 anchorFlipped = new Vector2(anchorPoint.x, Mathf.Abs (anchorPoint.y - Screen.height)); 
-				Vector2 clickFlipped = new Vector2(clickPoint.x, Mathf.Abs (clickPoint.y - Screen.height)); 
+			//The y input for ScreenToWorldPoint is calculated from the bottom-left instead of top-left.
+			//To correct for this, we have to flip the y coordinate about the Screen height.
+			Vector2 anchorFlipped = new Vector2(anchorPoint.x, Mathf.Abs (anchorPoint.y - Screen.height)); 
+			Vector2 clickFlipped = new Vector2(clickPoint.x, Mathf.Abs (clickPoint.y - Screen.height)); 
 
-				//Pull all cells within our selection
-				selection = Game.getBetween (
-					Camera.main.ScreenToWorldPoint (anchorFlipped), 
-					Camera.main.ScreenToWorldPoint(clickFlipped));
-				selection = Game.filterBy<CellBase> (selection);
+			//Pull all cells within our selection
+			selection = Game.getBetween (
+				Camera.main.ScreenToWorldPoint (anchorFlipped), 
+				Camera.main.ScreenToWorldPoint(clickFlipped));
+			selection = Game.filterBy<CellBase> (selection);
 
-				//Debug.Log ("Current selection: " + selection.Count + " cells.");
+			//Debug.Log ("Current selection: " + selection.Count + " cells.");
 
-				//Clear AI from selected cells
-				for (int i = 0; i < selection.Count; i++) 
-					(selection [i] as GameObject).GetComponent<CellBase> ().setPlayerControl (true);
+			//Clear AI from selected cells
+			for (int i = 0; i < selection.Count; i++) 
+				(selection [i] as GameObject).GetComponent<CellBase> ().setPlayerControl (true);
 
-				//Temporary- control everything we select
-				//Later, add code to check if we /can/ select this cell
-				Game.controlled = selection;
+			//Change the game's status as needed
+			Game.playerControllingCell = selection.Count > 0;
 
-				//Recompute center of mass
-				computeCenter ();
+			//Temporary- control everything we select
+			//Later, add code to check if we /can/ select this cell
+			Game.controlled = selection;
 
-				//Don't move
-				targetCoords = new Vector2 (0, 0);
-			} else { //unbind after click released
-				//selection = new ArrayList(); //clear selection
-				anchorPoint.x = 0;
-				anchorPoint.y = 0;
+			//Recompute center of mass
+			computeCenter ();
 
-				//If not selecting, then tell each cell to move to the requested location
-				for (int i = 0; i < Game.controlled.Count; i++) {
-					CellBase cb = (Game.controlled [i] as GameObject).GetComponent<CellBase> ();
+			//Don't move
+			targetCoords = new Vector2 (0, 0);
+		} else { //unbind after click released
+			//selection = new ArrayList(); //clear selection
+			anchorPoint.x = 0;
+			anchorPoint.y = 0;
 
-					//If we have a target to go to, then move there
-					if (targetCoords.x != 0 && targetCoords.y != 0) {
-						cb.navigateTo (targetCoords.x, targetCoords.y);
-					}
+			//If not selecting, then tell each cell to move to the requested location
+			for (int i = 0; i < Game.controlled.Count; i++) {
+				CellBase cb = (Game.controlled [i] as GameObject).GetComponent<CellBase> ();
+
+				//If we have a target to go to, then move there
+				if (targetCoords.x != 0 && targetCoords.y != 0) {
+					cb.navigateTo (targetCoords.x, targetCoords.y);
 				}
-
-				//calculate center position, velocity, and camera pos - unchanged if none selected
-				computeCenter();
-				if (Game.controlled.Count != 0) 
-					centerCamera ();
 			}
 
+			//calculate center position, velocity, and camera pos - unchanged if none selected
+			computeCenter();
+			if (Game.controlled.Count != 0) 
+				centerCamera ();
+		}
+
+		//player is in control of at least one cell
+		if (Game.playerControllingCell) {
 			//movement logic
 			if (Input.GetKey (KeyBindings.placeMvtMkr)) {
 				Vector3 wrldpnt = Camera.main.ScreenToWorldPoint (Input.mousePosition);

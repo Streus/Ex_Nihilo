@@ -19,9 +19,6 @@ public class Game : MonoBehaviour {
 
 		CellBase mover = create ("Round Cell Base", 0, 0).GetComponent<CellBase>();
 		mover.attach ("Cell Flagella", 180);
-		
-
-		playerControllingCell = true;
 
 		for (int i = 0; i < 100; i++) {
 			create ("Round Cell Base",
