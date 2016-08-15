@@ -38,6 +38,12 @@ public class GameManager : MonoBehaviour {
 		KeyBindings.ability10 = (KeyCode)PlayerPrefs.GetInt("keyability10", (int)KeyCode.Alpha0);
 		KeyBindings.pause = (KeyCode)PlayerPrefs.GetInt("keypause", (int)KeyCode.Tab);
 
+		//control options
+		string lkdCmra = PlayerPrefs.GetString("lockedcamera", "true");
+		GameOptions.lockedCamera = bool.Parse(lkdCmra);
+		GameOptions.panBorderSize = PlayerPrefs.GetInt("panbordersize", 11);
+		GameOptions.panSpeed = PlayerPrefs.GetFloat("panspeed", 5f);
+
 		//fullscreen
 		string fllscrn = PlayerPrefs.GetString("fullscreen", "false");
 		Screen.fullScreen = bool.Parse(fllscrn);
@@ -69,6 +75,11 @@ public class GameManager : MonoBehaviour {
 		PlayerPrefs.SetInt("keyability9", (int)KeyBindings.ability9);
 		PlayerPrefs.SetInt("keyability10", (int)KeyBindings.ability10);
 		PlayerPrefs.SetInt("keypause", (int)KeyBindings.pause);
+
+		//control options
+		PlayerPrefs.SetString("lockedcamera", GameOptions.lockedCamera.ToString());
+		PlayerPrefs.SetInt("panbordersize", GameOptions.panBorderSize);
+		PlayerPrefs.SetFloat("panspeed", GameOptions.panSpeed);
 
 		//fullscreen
 		PlayerPrefs.SetString("fullscreen", Screen.fullScreen.ToString());
@@ -127,4 +138,12 @@ public static class KeyBindings{
 
 	//misc
 	public static KeyCode pause;
+}
+
+public static class GameOptions{
+	
+	//control
+	public static bool lockedCamera;
+	public static int panBorderSize;
+	public static float panSpeed;
 }
