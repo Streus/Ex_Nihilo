@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
 		//control options
 		string lkdCmra = PlayerPrefs.GetString("lockedcamera", "false");
 		GameOptions.lockedCamera = bool.Parse(lkdCmra);
-		GameOptions.panBorderSize = PlayerPrefs.GetInt("panbordersize", 75);
+		GameOptions.panBorderSize = PlayerPrefs.GetFloat("panbordersize", 0.1f);
 		GameOptions.panSpeed = PlayerPrefs.GetFloat("panspeed", 0.05f);
 
 		//fullscreen
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour {
 
 		//control options
 		PlayerPrefs.SetString("lockedcamera", GameOptions.lockedCamera.ToString());
-		PlayerPrefs.SetInt("panbordersize", GameOptions.panBorderSize);
+		PlayerPrefs.SetFloat("panbordersize", GameOptions.panBorderSize);
 		PlayerPrefs.SetFloat("panspeed", GameOptions.panSpeed);
 
 		//fullscreen
@@ -144,6 +144,6 @@ public static class GameOptions{
 	
 	//control
 	public static bool lockedCamera;
-	public static int panBorderSize;
+	public static float panBorderSize;
 	public static float panSpeed;
 }
