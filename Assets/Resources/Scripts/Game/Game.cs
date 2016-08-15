@@ -98,7 +98,7 @@ public class Game : MonoBehaviour {
 	public static void destroy(GameObject to) {
 		objects.Remove (to);
 		Destroy (to);
-		objects.Remove (null);
+		objects.Remove (null); //just in case
 	}
 
 	/**
