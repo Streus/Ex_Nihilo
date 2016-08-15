@@ -39,10 +39,10 @@ public class GameManager : MonoBehaviour {
 		KeyBindings.pause = (KeyCode)PlayerPrefs.GetInt("keypause", (int)KeyCode.Tab);
 
 		//control options
-		string lkdCmra = PlayerPrefs.GetString("lockedcamera", "true");
+		string lkdCmra = PlayerPrefs.GetString("lockedcamera", "false");
 		GameOptions.lockedCamera = bool.Parse(lkdCmra);
-		GameOptions.panBorderSize = PlayerPrefs.GetInt("panbordersize", 11);
-		GameOptions.panSpeed = PlayerPrefs.GetFloat("panspeed", 5f);
+		GameOptions.panBorderSize = PlayerPrefs.GetInt("panbordersize", 75);
+		GameOptions.panSpeed = PlayerPrefs.GetFloat("panspeed", 0.05f);
 
 		//fullscreen
 		string fllscrn = PlayerPrefs.GetString("fullscreen", "false");
