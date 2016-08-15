@@ -10,13 +10,13 @@ public class Movement : MonoBehaviour {
 	private static Vector2 clickPoint  = new Vector2(0, 0); //Where the user is currently right-clicking
 
 	//Selection overlay options below
-	private static Color selectMainColor = new Color(1, 1, 1, 0.3f); //internal color
-	private static Color selectTrimColor = new Color(0, 0, 0, 0.3f); //edge color
+	private static Color selectMainColor; //internal color
+	private static Color selectTrimColor; //edge color
 
 	private static Texture2D selectMainTex;
 	private static Texture2D selectTrimTex;
 
-	public static int trimWidth = 3; //how wide are the edges?
+	public static int trimWidth; //how wide are the edges?
 
 	//Movement variables
 	public static Vector2 averagePos = new Vector2 (0, 0); //center-of-mass position
@@ -31,13 +31,29 @@ public class Movement : MonoBehaviour {
 
 	void Start() {
 		//Selection overlay init
+		setSelectMainColor(new Color(1, 1, 1, 0.3f));
+		setSelectTrimColor(new Color(0, 0, 0, 0.3f));
+		setSelectTrimWidth (3);
+	}
+
+	public void setSelectMainColor(Color col) {
+		selectMainColor = col;
+
 		selectMainTex = new Texture2D (1, 1);
 		selectMainTex.SetPixel (0, 0, selectMainColor);
 		selectMainTex.Apply ();
+	}
+
+	public void setSelectTrimColor (Color col) {
+		selectTrimColor = col;
 
 		selectTrimTex = new Texture2D (1, 1);
 		selectTrimTex.SetPixel (0, 0, selectTrimColor);
 		selectTrimTex.Apply ();
+	}
+
+	public void setSelectTrimWidth(int to) {
+		trimWidth = to;
 	}
 
 	// Update is called once per frame
