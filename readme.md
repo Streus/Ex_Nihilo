@@ -15,6 +15,10 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+## Build #59
+* Added unlocked camera controls - where you move the mouse to the edges of the screen to pan instead of the camera being fixed on the cells' center of position
+
+------
 ### Build #56
 * Pan Speed, Pan Border Size, and Camera Lock options added.
 
