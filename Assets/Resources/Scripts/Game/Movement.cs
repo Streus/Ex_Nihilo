@@ -109,9 +109,9 @@ public class Movement : MonoBehaviour {
 				Vector3 wrldpnt = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				targetCoords = new Vector2 (wrldpnt.x, wrldpnt.y);
 
-				//if (flag != null)
-				//	Game.destroy (flag);
-				//flag = Game.create ("Flag", wrldpnt.x, wrldpnt.y);
+				if (flag != null)
+					Game.destroy (flag);
+				flag = Game.create ("Flag", wrldpnt.x, wrldpnt.y);
 			}
 
 			Debug.Log ("Controlling " + Game.controlled.Count + " cell objects.");
