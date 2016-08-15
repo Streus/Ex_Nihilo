@@ -15,6 +15,9 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #54
+* Fixed and re-added Flag asset (see issue [#52](https://github.com/Streus/Ex_Nihilo/issues/52))
+
 ### Build #51
 * CellBase movement code now migrated to "Movement" class
 * Generalized movement code to allow for many cells, all grouped around their mutual center of position
