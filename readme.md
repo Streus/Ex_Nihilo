@@ -15,9 +15,24 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #59
+* Added unlocked camera controls - where you move the mouse to the edges of the screen to pan instead of the camera being fixed on the cells' center of position
+
+------
+### Build #56
+* Pan Speed, Pan Border Size, and Camera Lock options added.
+
+------
+
+### Build #55
+* If Game.playerControllingCell = false, then none of the movement scripts work. This fix makes selection always work, and movement work only if Game.playerControllingCell, as well as sets that variable properly.
+* Added configuration methods for Movement class
+
+------
 ### Build #54
 * Fixed and re-added Flag asset (see issue [#52](https://github.com/Streus/Ex_Nihilo/issues/52))
 
+------
 ### Build #51
 * CellBase movement code now migrated to "Movement" class
 * Generalized movement code to allow for many cells, all grouped around their mutual center of position
