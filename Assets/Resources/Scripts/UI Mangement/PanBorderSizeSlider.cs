@@ -17,7 +17,7 @@ public class PanBorderSizeSlider : MonoBehaviour {
 
 	//update the master volume for the game.
 	public void updateBorderSize(){
-		GameOptions.panBorderSize = (int)borderSlider.value;
+		GameOptions.panBorderSize = borderSlider.value;
 	}
 
 	public void Update(){
