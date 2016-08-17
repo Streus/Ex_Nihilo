@@ -15,6 +15,13 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #66
+* Hotbar added.
+* Energy bar added.
+* Pause menu and most sub-menus added.
+* Most back-end functionality still pending.
+
+------
 ### Build #59
 * Added unlocked camera controls - where you move the mouse to the edges of the screen to pan instead of the camera being fixed on the cells' center of position
 
