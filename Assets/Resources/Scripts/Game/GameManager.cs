@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 		DontDestroyOnLoad(transform.gameObject);
 			
 		//make devconsole
-		PrefabUtility.InstantiatePrefab(Resources.Load("Prefabs/GameManagement/DevConsole", typeof(GameObject)));
+		//PrefabUtility.InstantiatePrefab(Resources.Load("Prefabs/GameManagement/DevConsole", typeof(GameObject)));
 
 		loadOptions ();
 	}
@@ -98,22 +98,54 @@ public class GameManager : MonoBehaviour {
 		PlayerPrefs.Save();
 	}
 
+	public void resetControls()
+	{
+		PlayerPrefs.DeleteKey("keyselect");
+		PlayerPrefs.DeleteKey("keyplacemvtmkr");
+		PlayerPrefs.DeleteKey("keyholdground");
+		PlayerPrefs.DeleteKey("keyability1");
+		PlayerPrefs.DeleteKey("keyability2");
+		PlayerPrefs.DeleteKey("keyability3");
+		PlayerPrefs.DeleteKey("keyability4");
+		PlayerPrefs.DeleteKey("keyability5");
+		PlayerPrefs.DeleteKey("keyability6");
+		PlayerPrefs.DeleteKey("keyability7");
+		PlayerPrefs.DeleteKey("keyability8");
+		PlayerPrefs.DeleteKey("keyability9");
+		PlayerPrefs.DeleteKey("keyability10");
+		PlayerPrefs.DeleteKey("keypause");
+		loadOptions();
+	}
+
+	public void resetOptions()
+	{
+		PlayerPrefs.DeleteKey("lockedcamera");
+		PlayerPrefs.DeleteKey("panbordersize");
+		PlayerPrefs.DeleteKey("panspeed");
+		PlayerPrefs.DeleteKey("fullscreen");
+		PlayerPrefs.DeleteKey("mastervolume");
+		PlayerPrefs.DeleteKey("musicvolume");
+		PlayerPrefs.DeleteKey("effectsvolume");
+		loadOptions();
+	}
+
 	//load the save game names from the saved games folder
 	public string[] getSaveGames()
 	{
+		//TODO
 		return new string[] {"A", "B", "C", "D", "E", "F", "G", "H"};
 	}
 
 	//load a game from the saved games folder
 	public void loadGame(string name)
 	{
-
+		//TODO
 	}
 
 	//save a game to the saved games folder
 	public void saveGame(string name)
 	{
-
+		//TODO
 	}
 }
 
