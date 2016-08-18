@@ -58,6 +58,11 @@ public class Movement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		//Pause logic
+		if (Input.GetKeyDown (KeyBindings.pause)) {
+			Game.setPause (!Game.paused);
+		}
+
 		//selection UI and logic
 		if(Input.GetKey(KeyBindings.select)) {
 			Vector2 mousePoint = Input.mousePosition;
