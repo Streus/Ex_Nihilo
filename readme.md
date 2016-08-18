@@ -15,6 +15,13 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #69
+* Added Ability base class
+* Started work on Mating call ability
+* Added options and controls reset buttons
+* Fixed in-game options/controls saving
+
+------
 ### Build #68
 * Added a pause variable and methods in Game
 * Gave cells behavior conditional on the pause state
