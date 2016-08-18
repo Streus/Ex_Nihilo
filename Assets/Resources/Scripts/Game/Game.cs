@@ -4,7 +4,10 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
 	//Is the player controlling a cell?
-	public static bool playerControllingCell = false;	
+	public static bool playerControllingCell = false;
+
+	//Pause control variable
+	public static bool paused = false;
 
 	//What is the player currently in control of?
 	public static ArrayList controlled = new ArrayList();
@@ -30,6 +33,20 @@ public class Game : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	}
+
+	/**
+	 * Toggles the pause state of the game. 
+	 */
+	public static void setPause(bool to) {
+		paused = to;
+		Time.timeScale = to? 0 : 1;
+	}
+
+	//Pauses the game
+	public static void pause() { setPause (true); }
+
+	//Unpauses the game
+	public static void unpause() { setPause (false); }
 
 	/**
 	 * Creates a GameObject of type "name"
