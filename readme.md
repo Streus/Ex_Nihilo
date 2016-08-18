@@ -15,11 +15,23 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #68
+* Added a pause variable and methods in Game
+* Gave cells behavior conditional on the pause state
+
+------
 ### Build #66
 * Hotbar added.
 * Energy bar added.
 * Pause menu and most sub-menus added.
 * Most back-end functionality still pending.
+
+------
+### Build #63
+* *Note: builds 61-63 were very minor, and are lumped into the stable 63 build.*
+* Fixed pan border to use percents instead of pixels
+* In-game GUI started
+* Added unlocked camera controls - where you move the mouse to the edges of the screen to pan instead of the camera being fixed on the cells' center of position
 
 ------
 ### Build #59
