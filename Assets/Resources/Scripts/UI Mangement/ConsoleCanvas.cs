@@ -9,6 +9,11 @@ public class ConsoleCanvas : MonoBehaviour {
 		Canvas canvasElement = GetComponent<Canvas>();
 		canvasElement.worldCamera = (Camera)GameObject.Find("Camera").GetComponent<Camera>();
 	}
+
+	void OnLevelWasLoaded() {
+		Canvas canvasElement = GetComponent<Canvas>();
+		canvasElement.worldCamera = (Camera)GameObject.Find("Camera").GetComponent<Camera>();
+	}
 	
 	// Update is called once per frame
 	void Update () {
