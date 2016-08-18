@@ -98,6 +98,9 @@ public class CellBase : MonoBehaviour {
 	 * Positive values move forward, negative move backward;
 	 */
 	public void move(float speed) { 
+		if (Game.paused)
+			return;
+		
 		if (speed < -1)
 			speed = -1;
 		if (speed > 1)
@@ -110,6 +113,9 @@ public class CellBase : MonoBehaviour {
 	 * Negative values turn right, positive turn left.
 	 */
 	public void turn(float deltaRotation) {
+		if (Game.paused)
+			return;
+		
 		physBody.rotation += deltaRotation * turnSpeed;
 	}
 		
