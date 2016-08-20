@@ -4,7 +4,7 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.Audio;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
 
 	public AudioMixer gameMix;
 

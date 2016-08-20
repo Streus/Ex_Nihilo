@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraControl : MonoBehaviour {
+public class CameraManager : Singleton<CameraManager> {
 
 	//A reference to the main camera
 	private static Camera mainCamera;
@@ -13,9 +13,6 @@ public class CameraControl : MonoBehaviour {
 	//Height above the game arena
 	public static float zoom;
 
-	private static float xDamp;
-	private static float yDamp;
-
 	// Use this for initialization
 	void Start () {
 		mainCamera = Camera.main;
@@ -23,9 +20,6 @@ public class CameraControl : MonoBehaviour {
 		xOffset = mainCamera.transform.position.x;
 		yOffset = mainCamera.transform.position.y;
 		zoom  = Mathf.Log(mainCamera.orthographicSize, 2);
-
-		xDamp = 0.5F;
-		yDamp = 0.5F;
 	}
 	
 	// Update is called once per frame
