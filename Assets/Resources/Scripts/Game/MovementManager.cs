@@ -4,7 +4,7 @@ using System.Collections;
 /**
  * A class that handles all of the player's interactions
  */
-public class Movement : MonoBehaviour {
+public class MovementManager : Singleton<MovementManager> {
 	//Selection variables
 	private static Vector2 anchorPoint = new Vector2(0, 0); //Where the user right-clicks to select
 	private static Vector2 clickPoint  = new Vector2(0, 0); //Where the user is currently right-clicking
@@ -147,14 +147,14 @@ public class Movement : MonoBehaviour {
 
 			//NOTE: When zoom is removed, change the default pan speed to compensate.
 			if (x < panX)
-				CameraControl.xOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (x - panX) / panX * speed;
+				CameraManager.xOffset -= Mathf.Pow (2, CameraManager.zoom) * Mathf.Abs (x - panX) / panX * speed;
 			else if (x > Screen.width - panX)
-				CameraControl.xOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.width - x - panX) / panX * speed;
+				CameraManager.xOffset += Mathf.Pow (2, CameraManager.zoom) * Mathf.Abs (Screen.width - x - panX) / panX * speed;
 
 			if (y < panY)
-				CameraControl.yOffset -= Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (y - panY) / panY * speed;
+				CameraManager.yOffset -= Mathf.Pow (2, CameraManager.zoom) * Mathf.Abs (y - panY) / panY * speed;
 			else if (y > Screen.height - panY)
-				CameraControl.yOffset += Mathf.Pow (2, CameraControl.zoom) * Mathf.Abs (Screen.height - y - panY) / panY * speed;
+				CameraManager.yOffset += Mathf.Pow (2, CameraManager.zoom) * Mathf.Abs (Screen.height - y - panY) / panY * speed;
 		}
 
 		//player is in control of at least one cell
@@ -216,13 +216,13 @@ public class Movement : MonoBehaviour {
 		//"deltaTime" is the amount of time passed since the last frame.
 		//Multiplying this by the velocity smoothes out the laggy camera.
 		//float del = Time.deltaTime;
-		//CameraControl.xOffset = transform.position.x + (physBody.velocity.x * del);
-		//CameraControl.yOffset = transform.position.y + (physBody.velocity.y * del);
+		//CameraManager.xOffset = transform.position.x + (physBody.velocity.x * del);
+		//CameraManager.yOffset = transform.position.y + (physBody.velocity.y * del);
 
 		Debug.Log ("Camera recentering: " + averagePos.x + ", " + averagePos.y);
 
 		//We set the camera to the average of the controlled cells' positions
-		CameraControl.xOffset = averagePos.x;
-		CameraControl.yOffset = averagePos.y;
+		CameraManager.xOffset = averagePos.x;
+		CameraManager.yOffset = averagePos.y;
 	}
 }

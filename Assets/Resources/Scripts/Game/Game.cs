@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Game : MonoBehaviour {
+public class Game : Singleton<Game> {
 
 	//Is the player controlling a cell?
 	public static bool playerControllingCell = false;

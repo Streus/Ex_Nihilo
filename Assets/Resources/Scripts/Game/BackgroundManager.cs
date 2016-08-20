@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BackgroundLogic : MonoBehaviour {
+public class BackgroundManager : MonoBehaviour {
 
 	//Height of the quad- should be behind the camera (< -10)
 	private static int quadHeight = -20;
