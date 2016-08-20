@@ -15,6 +15,14 @@ Example: [Google](https://www.google.com)
 
 ## Patch notes (in chronological order)
 
+### Build #71
+* Created Singleton class, which all Manager-like classes must subclass to work properly
+* Renamed manager classes to *Manager, as needed
+* Fixed and cleaned up some old and commented code
+* Changed the Game scene to have all Manager classes grouped neatly
+* Added DevManual.md, which has a few coding guidelines that are useful for development purposes
+
+------
 ### Build #69
 * Added Ability base class
 * Started work on Mating call ability
